@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Abstractio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background", "Astor.Background\Astor.Background.csproj", "{27EBF590-0470-4C27-98E4-F6B62C10DF3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.DebugWebApi", "Example.DebugWebApi\Example.DebugWebApi.csproj", "{F74B07BA-7A0F-4541-AFB9-656028FED485}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{27EBF590-0470-4C27-98E4-F6B62C10DF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27EBF590-0470-4C27-98E4-F6B62C10DF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27EBF590-0470-4C27-98E4-F6B62C10DF3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74B07BA-7A0F-4541-AFB9-656028FED485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74B07BA-7A0F-4541-AFB9-656028FED485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74B07BA-7A0F-4541-AFB9-656028FED485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74B07BA-7A0F-4541-AFB9-656028FED485}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
