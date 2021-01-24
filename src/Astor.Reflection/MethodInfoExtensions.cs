@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Astor.Background
+namespace Astor.Reflection
 {
     public static class MethodInfoExtensions
     {

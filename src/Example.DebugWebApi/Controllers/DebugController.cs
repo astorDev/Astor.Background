@@ -1,31 +1,35 @@
-using System;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Astor.Background;
+using GreenPipes;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Example.DebugWebApi.Controllers
 {
     [Route("")]
     public class DebugController : Controller
     {
+        public IPipe<EventContext> Pipe { get; }
         public Astor.Background.Service Service { get; }
-        public IServiceProvider ServiceProvider { get; }
 
-        public DebugController(Astor.Background.Service service, IServiceProvider serviceProvider)
+        public DebugController(IPipe<EventContext> pipe, Astor.Background.Service service)
         {
+            this.Pipe = pipe;
             this.Service = service;
-            this.ServiceProvider = serviceProvider;
         }
         
         [HttpPost("{actionId}")]
-        public Task<object> HandleAsync(string actionId, [FromBody] object request)
+        public async Task<object> HandleAsync(string actionId, [FromBody] object request)
         {
+            var action = this.Service.Actions[actionId];
             var inputJson = JsonConvert.SerializeObject(request);
-            return this.Service.RunAsync(actionId, inputJson, this.ServiceProvider);
+            var context = new EventContext(action, new Input
+            {
+                BodyString = inputJson
+            });
+            
+            await this.Pipe.Send(context);
+            return context.ActionResult.Output;
         }
     }
 }
