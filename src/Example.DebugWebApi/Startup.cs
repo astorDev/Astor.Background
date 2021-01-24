@@ -1,20 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Astor.Background;
+using Astor.Background.Filters;
 using Astor.Background.Management.Scraper;
-using Example.Service.Controllers;
-using Example.Service.Domain;
+using Astor.GreenPipes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -38,11 +31,14 @@ namespace Example.DebugWebApi
                     o.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
-
-            
             
             var backgroundServiceStartup = new Example.Service.Startup(this.Configuration);
             backgroundServiceStartup.ConfigureServices(services);
+            
+            services.AddPipe<EventContext>(pipe => 
+                pipe.UseJsonBodyDeserializer()
+                    .UseActionExecutor()
+                );
             
             services.AddSingleton(sp =>
             {

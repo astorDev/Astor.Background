@@ -22,20 +22,23 @@ namespace Astor.Background
 
         public static Service Parse(Assembly assembly)
         {
-            var subscriptions = from t in assembly.DefinedTypes
-                from m in t.DeclaredMethods
+            return Parse(assembly.DefinedTypes.ToArray());
+        }
+
+        public static Service Parse(params Type[] types)
+        {
+            return Parse(types.SelectMany(t => t.GetMethods()).ToArray());
+        }
+
+        public static Service Parse(params MethodInfo[] methods)
+        {
+            var subscriptions = from m in methods
                 from a in m.GetCustomAttributes(typeof(SubscribedOnAttribute))
-                select new Subscription((SubscribedOnAttribute)a, new Action(m, t));
+                select new Subscription((SubscribedOnAttribute) a, new Action(m));
 
             return new Service(subscriptions.ToArray());
         }
 
-        public Task<object> RunAsync(string actionId, string inputJson, IServiceProvider serviceProvider)
-        {
-            var action = this.Actions[actionId];
-            return action.ExecuteAsync(inputJson, serviceProvider);
-        }
-        
         private Dictionary<string, Action> readActions()
         {
             var result = new Dictionary<string, Action>();

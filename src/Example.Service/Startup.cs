@@ -1,4 +1,4 @@
-using System.Linq;
+using Astor.Background;
 using Example.Service.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,13 +16,7 @@ namespace Example.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var service = Astor.Background.Service.Parse(this.GetType().Assembly);
-
-            services.AddSingleton(service);
-            foreach (var controllerTypes in service.ControllerTypes)
-            {
-                services.AddScoped(controllerTypes);
-            }
+            services.AddBackground(this.GetType().Assembly);
             
             services.Configure<GreetingPhrases>(this.Configuration.GetSection("Phrases"));
         }
