@@ -31,7 +31,8 @@ namespace Astor.Background.Filters
     
     public static class ActionExecutorRegistrationExtension
     {
-        public static PipeBuilder<EventContext> UseActionExecutor(this PipeBuilder<EventContext> pipeBuilder) => 
+        public static PipeBuilder<EventContext> UseActionExecutor(
+            this PipeBuilder<EventContext> pipeBuilder)=>
             pipeBuilder.Use<ActionExecutor>();
     }
 }

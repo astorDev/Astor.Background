@@ -19,7 +19,7 @@ namespace Example.Service.Controllers
         [SubscribedOn("newcomer-appeared")]
         public async Task<string> SayHelloAsync(GreetingCandidate candidate)
         {
-            return $"{this.Phrases.Beginning}, {candidate.Name} from {candidate.City.Title}";
+            return $"{this.Phrases.Beginning}, {candidate.Name} from {candidate.City?.Title}";
         }
     }
 }

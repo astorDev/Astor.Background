@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.RabbitMq", "Astor.Rab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reflection", "Astor.Reflection\Astor.Reflection.csproj", "{498E0C45-A613-4698-B537-3AED7FE1C625}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.RabbitMq", "Astor.Background.RabbitMq\Astor.Background.RabbitMq.csproj", "{159A4A78-EB03-4C81-9C56-647F4E9F0D1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +86,9 @@ Global
 		{498E0C45-A613-4698-B537-3AED7FE1C625}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{498E0C45-A613-4698-B537-3AED7FE1C625}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{498E0C45-A613-4698-B537-3AED7FE1C625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{159A4A78-EB03-4C81-9C56-647F4E9F0D1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{159A4A78-EB03-4C81-9C56-647F4E9F0D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{159A4A78-EB03-4C81-9C56-647F4E9F0D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{159A4A78-EB03-4C81-9C56-647F4E9F0D1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
