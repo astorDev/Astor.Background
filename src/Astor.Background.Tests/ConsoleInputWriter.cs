@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Astor.Background.Core;
 using Astor.GreenPipes;
 using GreenPipes;
 

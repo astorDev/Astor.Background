@@ -1,6 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using Astor.Background.Abstractions;
+using Astor.Background.Core.Abstractions;
 using Example.Service.Domain;
 using Example.Service.Models;
 using Microsoft.Extensions.Options;

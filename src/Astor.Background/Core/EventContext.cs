@@ -1,6 +1,6 @@
 using GreenPipes;
 
-namespace Astor.Background
+namespace Astor.Background.Core
 {
     public class EventContext : BasePipeContext, PipeContext
     {

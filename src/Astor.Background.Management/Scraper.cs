@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Astor.Background.Core;
 using Astor.Background.Management.Protocol;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;

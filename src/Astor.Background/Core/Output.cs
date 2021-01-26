@@ -1,4 +1,4 @@
-namespace Astor.Background
+namespace Astor.Background.Core
 {
     public class ActionResult
     {

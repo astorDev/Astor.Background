@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Astor.Background.Filters;
+using Astor.Background.Core;
+using Astor.Background.Core.Filters;
 using Example.Service.Controllers;
 using Example.Service.Models;
 using GreenPipes;

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Astor.Background.Filters;
+using Astor.Background.Core;
+using Astor.Background.Core.Filters;
 using Example.Service;
 using Example.Service.Controllers;
 using Example.Service.Domain;

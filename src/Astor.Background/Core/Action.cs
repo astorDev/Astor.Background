@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace Astor.Background
+namespace Astor.Background.Core
 {
     public class Action
     {

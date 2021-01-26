@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Astor.Background.Core;
 using Astor.Background.Management.Protocol;
 using Example.Service.Models;
 using Microsoft.OpenApi;
