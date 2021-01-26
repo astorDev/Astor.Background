@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Astor.Background.Core;
 using GreenPipes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

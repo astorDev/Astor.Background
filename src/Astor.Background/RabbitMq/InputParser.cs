@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using Astor.Background.Core;
 using RabbitMQ.Client.Events;
 
 namespace Astor.Background.RabbitMq

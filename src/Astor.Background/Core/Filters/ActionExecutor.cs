@@ -5,7 +5,7 @@ using Astor.Reflection;
 using GreenPipes;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Astor.Background.Filters
+namespace Astor.Background.Core.Filters
 {
     public class ActionExecutor : IFilter<EventContext>
     {

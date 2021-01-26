@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Astor.Background.Abstractions;
+using Astor.Background.Core.Abstractions;
 
-namespace Astor.Background
+namespace Astor.Background.Core
 {
     public class Service
     {

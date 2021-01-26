@@ -3,7 +3,7 @@ using Astor.GreenPipes;
 using GreenPipes;
 using Newtonsoft.Json;
 
-namespace Astor.Background.Filters
+namespace Astor.Background.Core.Filters
 {
     public class JsonBodyDeserializer : IFilter<EventContext>
     {

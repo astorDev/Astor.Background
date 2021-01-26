@@ -1,6 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using Astor.Background.Abstractions;
+using Astor.Background.Core.Abstractions;
 using Example.Service.Domain;
 using Example.Service.Models;
 using Microsoft.Extensions.Options;
@@ -19,7 +18,7 @@ namespace Example.Service.Controllers
         [SubscribedOn("newcomer-appeared")]
         public async Task<string> SayHelloAsync(GreetingCandidate candidate)
         {
-            return $"{this.Phrases.Beginning}, {candidate.Name} from {candidate.City?.Title}";
+            return $"{this.Phrases.Beginning}, {candidate.Name} from {candidate.City.Title}";
         }
     }
 }

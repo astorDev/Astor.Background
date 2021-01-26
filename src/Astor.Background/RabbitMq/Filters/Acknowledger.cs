@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Astor.Background.Core;
 using GreenPipes;
 using RabbitMQ.Client;
 

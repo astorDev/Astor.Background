@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Astor.Background;
+using Astor.Background.Core;
 using GreenPipes;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,9 +11,9 @@ namespace Example.DebugWebApi.Controllers
     public class DebugController : Controller
     {
         public IPipe<EventContext> Pipe { get; }
-        public Astor.Background.Service Service { get; }
+        public Astor.Background.Core.Service Service { get; }
 
-        public DebugController(IPipe<EventContext> pipe, Astor.Background.Service service)
+        public DebugController(IPipe<EventContext> pipe, Astor.Background.Core.Service service)
         {
             this.Pipe = pipe;
             this.Service = service;

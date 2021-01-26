@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Astor.Background
+namespace Astor.Background.Core
 {
     public static class ServiceCollectionExtensions
     {

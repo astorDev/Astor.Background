@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Astor.Background
+namespace Astor.Background.Core
 {
     public class Input
     {

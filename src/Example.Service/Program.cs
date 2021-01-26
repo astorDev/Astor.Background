@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Astor.Background;
+using Astor.Background.Core;
 using Astor.GreenPipes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,7 @@ namespace Example.Service
             var builder = new HostBuilder()
                 .ConfigureHostConfiguration(config =>
                 {
+                    config.AddUserSecrets(typeof(Program).Assembly);
                     config.AddCommandLine(args);
                 })
                 .ConfigureAppConfiguration((context, config) => 

@@ -1,5 +1,6 @@
 using Astor.Background;
-using Astor.Background.Filters;
+using Astor.Background.Core;
+using Astor.Background.Core.Filters;
 using Astor.Background.Management.Scraper;
 using Astor.GreenPipes;
 using Microsoft.AspNetCore.Builder;
@@ -42,7 +43,7 @@ namespace Example.DebugWebApi
             
             services.AddSingleton(sp =>
             {
-                var service = sp.GetRequiredService<Astor.Background.Service>();
+                var service = sp.GetRequiredService<Astor.Background.Core.Service>();
                 var description = service.GetDescription(new OpenApiInfo
                 {
                     Title = "Example.DebugWebApi",
