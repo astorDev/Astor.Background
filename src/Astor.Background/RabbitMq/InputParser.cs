@@ -13,7 +13,8 @@ namespace Astor.Background.RabbitMq
             {
                 Headers = new Dictionary<string, object>
                 {
-                    { HeaderNames.DeliveryTag, eventArgs.DeliveryTag}
+                    { HeaderNames.DeliveryTag, eventArgs.DeliveryTag},
+                    { HeaderNames.Exchange, eventArgs.Exchange }
                 },
                 BodyString = Encoding.UTF8.GetString(eventArgs.Body.ToArray())
             };
@@ -22,6 +23,7 @@ namespace Astor.Background.RabbitMq
         public static class HeaderNames
         {
             public const string DeliveryTag = "deliveryTag";
+            public const string Exchange = "exchange";
         }
     }
 }

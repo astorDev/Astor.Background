@@ -6,7 +6,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Astor.Background.Abstractions\Astor.Background.Abstractions.csproj" />
+      <ProjectReference Include="..\Astor.Background.Management.Protocol\Astor.Background.Management.Protocol.csproj" />
       <ProjectReference Include="..\Astor.GreenPipes\Astor.GreenPipes.csproj" />
+      <ProjectReference Include="..\Astor.RabbitMq\Astor.RabbitMq.csproj" />
       <ProjectReference Include="..\Astor.Reflection\Astor.Reflection.csproj" />
     </ItemGroup>
 
@@ -30,7 +32,7 @@
 
     <ItemGroup>
       <PackageReference Include="GreenPipes" Version="4.0.0" />
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
       <PackageReference Include="Telegram.Bot" Version="15.7.1" />
     </ItemGroup>

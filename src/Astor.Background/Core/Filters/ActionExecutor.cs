@@ -19,11 +19,18 @@ namespace Astor.Background.Core.Filters
         public async Task Send(EventContext context, IPipe<EventContext> next)
         {
             var controller = this.ServiceProvider.GetRequiredService(context.Action.Type);
-            context.ActionResult.Output = await context.Action.Method.InvokeAsync(controller, context.Input.BodyObject);
+            context.ActionResult.Output = await this.invokeAsync(context, controller);
 
             await next.Send(context);
         }
 
+        private Task<object> invokeAsync(EventContext context, object controller)
+        {
+            return context.Input.BodyObject == null
+                ? context.Action.Method.InvokeAsync(controller)
+                : context.Action.Method.InvokeAsync(controller, context.Input.BodyObject);
+        }
+        
         public void Probe(ProbeContext context)
         {
         }
