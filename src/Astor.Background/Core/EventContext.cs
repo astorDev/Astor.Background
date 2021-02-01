@@ -7,6 +7,7 @@ namespace Astor.Background.Core
         public Action Action { get; }
         public Input Input { get; }
         public ActionResult ActionResult { get; } = new();
+        public HandlingParams HandlingParams { get; } = new();
 
         public EventContext(Action action, Input input)
         {

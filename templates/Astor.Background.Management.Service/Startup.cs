@@ -5,10 +5,9 @@ using Astor.Background.RabbitMq.Filters;
 using Astor.Background.TelegramNotifications;
 using Astor.GreenPipes;
 using Astor.RabbitMq;
-using Example.Service.Domain;
-using Example.Service.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using Telegram.Bot;
 
 namespace Example.Service
@@ -34,20 +33,22 @@ namespace Example.Service
                 var chatId = Int64.Parse(this.Configuration["Telegram:ChatId"]);
                 return new TelegramNotifier(botClient, chatId);
             });
-            
-            services.Configure<GreetingPhrases>(this.Configuration.GetSection("Phrases"));
+
+            services.AddSingleton<IMongoClient>(new MongoClient(this.Configuration.GetConnectionString("Mongo")));
+            services.AddSingleton(sp =>
+            {
+                var client = sp.GetRequiredService<IMongoClient>();
+                return client.GetDatabase("background");
+            });
         }
 
         public void ConfigurePipe(PipeBuilder<EventContext> builder)
         {
             builder
-                    .Use<Acknowledger>()
-                    .Use<LogPublisher>()
-                    .Use<HandlingTimer>()
-                    .Use<ExceptionCatcherWithTelegramNotifications>()
-                    .Use<JsonBodyDeserializer>()
-                    .Use<ActionExceptionCatcher>()
-                    .Use<ActionExecutor>()
+                .Use<Acknowledger>()
+                .Use<ExceptionCatcherWithTelegramNotifications>()
+                .Use<JsonBodyDeserializer>()
+                .Use<ActionExecutor>()
                 ;
         }
     }
