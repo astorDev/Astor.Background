@@ -1,0 +1,25 @@
+version: '3.9'
+
+services: 
+  service:
+    image: vosarat/background-management-service:1.0.0.1
+    restart: always
+    build:
+      context: Astor.Background.Management.Service
+    environment:
+      - RABBIT_CONNECTIONSTRING=amqp://rabbit:5672
+      - MONGO_CONNECTIONSTRING=mongodb://mongo:27017
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_CHATID=${TELEGRAM_CHATID}
+    depends_on: 
+      - rabbit
+      - mongo
+  rabbit:
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017

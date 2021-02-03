@@ -1,29 +1,24 @@
 ﻿using System.Threading.Tasks;
 using Astor.Background.Core;
+using Astor.Background.Management.Protocol;
 using Astor.GreenPipes;
 using Example.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
 
 namespace Astor.Background.Management.Service
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static Task Main(string[] args)
         {
             var builder = new HostBuilder()
                 .ConfigureHostConfiguration(config =>
                 {
                     config.AddUserSecrets(typeof(Program).Assembly);
                     config.AddCommandLine(args);
-                })
-                .ConfigureAppConfiguration((context, config) => 
-                {
-                    var environment = context.HostingEnvironment.EnvironmentName;
-
-                    config.AddJsonFile("appsettings.json");
-                    config.AddJsonFile($"appsettings.{environment}.json");
                 })
                 .ConfigureServices((host, services) =>
                 {
@@ -37,7 +32,10 @@ namespace Astor.Background.Management.Service
 
             var host = builder.UseConsoleLifetime().Build();
 
-            await host.RunAsync();
+            var channel = host.Services.GetRequiredService<IModel>();
+            channel.ExchangeDeclare(ExchangeNames.Logs, "fanout", true, false);
+            
+            return host.RunAsync();
         }
     }
 }
