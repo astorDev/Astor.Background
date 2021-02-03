@@ -17,7 +17,7 @@ namespace Astor.Background.Management.Service.Controllers
             this.Db = db;
         }
         
-        [SubscribedOn("background-logs")]
+        [SubscribedOn(ExchangeNames.Logs)]
         public async Task Save(ActionResultCandidate resultCandidate)
         {
             var collection = this.Db.GetCollection<object>(resultCandidate.ActionId);
@@ -36,8 +36,6 @@ namespace Astor.Background.Management.Service.Controllers
                 Event = bsonDocument["Event"],
                 ResultDocument = bsonDocument["Result"]
             });
-            
-            Console.WriteLine("some log is saved");
         }
     }
 }

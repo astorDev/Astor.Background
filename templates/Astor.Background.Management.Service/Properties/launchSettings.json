@@ -1,9 +1,9 @@
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Development": {
+    "Localhost" : {
       "commandName": "Project",
-      "commandLineArgs": "--environment=Development"
+      "commandLineArgs" : "--ConnectionStrings:Rabbit=amqp://localhost:5672 --ConnectionStrings:Mongo=mongodb://localhost:27017"
     }
   }
 }

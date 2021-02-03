@@ -8,6 +8,7 @@ using Astor.RabbitMq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using RabbitMQ.Client;
 using Telegram.Bot;
 
 namespace Example.Service
@@ -24,9 +25,10 @@ namespace Example.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBackground(this.GetType().Assembly);
-            services.AddRabbit(this.Configuration.GetSection("Rabbit"));
+            
+            services.AddRabbit(this.Configuration.GetConnectionString("Rabbit"));
 
-            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(this.Configuration["Telegram:BotToken"]));
+            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(this.Configuration["Telegram:Token"]));
             services.AddSingleton(sp =>
             {
                 var botClient = sp.GetRequiredService<ITelegramBotClient>();
@@ -38,7 +40,9 @@ namespace Example.Service
             services.AddSingleton(sp =>
             {
                 var client = sp.GetRequiredService<IMongoClient>();
-                return client.GetDatabase("background");
+                var dbName = this.Configuration["Mongo:DbName"] ?? "background";
+                
+                return client.GetDatabase(dbName);
             });
         }
 
