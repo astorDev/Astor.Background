@@ -2,7 +2,7 @@ version: '3.9'
 
 services: 
   service:
-    image: vosarat/background-management-service:1.0.0.1
+    image: vosarat/background-management-service:1.0.0.2
     restart: always
     build:
       context: Astor.Background.Management.Service
