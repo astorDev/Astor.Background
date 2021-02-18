@@ -15,6 +15,6 @@ namespace Astor.Background.Management.Protocol
 
     public sealed record HandlerDescription
     {
-        public string Input { get; set; }
+        public OpenApiSchema Input { get; set; }
     }
 }

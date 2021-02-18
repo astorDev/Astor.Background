@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Astor.Background.Management\Astor.Background.Management.csproj" />
+      <ProjectReference Include="..\Astor.Background\Astor.Background.csproj" />
       <ProjectReference Include="..\Example.Service\Example.Service.csproj" />
     </ItemGroup>
 

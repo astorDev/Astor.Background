@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -31,7 +32,7 @@ namespace Astor.Background.Management.Scraper
             {
                 SchemaIdSelector = (t) => camelCase(t.Name)
             };
-            var behavior = new NewtonsoftDataContractResolver(generatorOptions, new JsonSerializerSettings
+            var behavior = new NewtonsoftDataContractResolver(new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             });
@@ -62,12 +63,42 @@ namespace Astor.Background.Management.Scraper
                     s => s.Action.Id, 
                     s => new HandlerDescription
                     {
-                        Input = camelCase(s.Action.InputType.Name)
+                        Input = GetSchema(s.Action.InputType)
                     }),
                 Schemas = schemas
             };
         }
 
+        public static OpenApiSchema GetSchema(Type type)
+        {
+            if (type.GetMethod("GetEnumerator") != null) 
+            {
+                var arrayType = type.GenericTypeArguments.Single();
+
+                return new OpenApiSchema
+                {
+                    Type = "array",
+                    Items = new OpenApiSchema
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.Schema,
+                            Id = camelCase(arrayType.Name)
+                        }
+                    }
+                };
+            }
+
+            return new OpenApiSchema
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.Schema,
+                    Id = camelCase(type.Name)
+                }
+            };
+        }
+        
         public static OpenApiComponents GetOpenApiComponents(this ServiceDescription description)
         {
             
@@ -102,14 +133,7 @@ namespace Astor.Background.Management.Scraper
                                 {
                                     { "application/json", new OpenApiMediaType
                                     {
-                                        Schema = new OpenApiSchema
-                                        {
-                                            Reference = new OpenApiReference
-                                            {
-                                                Type = ReferenceType.Schema,
-                                                Id = value.Input
-                                            }
-                                        }
+                                        Schema = value.Input
                                     }}
                                 } 
                             },

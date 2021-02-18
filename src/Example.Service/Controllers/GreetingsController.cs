@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Astor.Background.Core.Abstractions;
 using Example.Service.Domain;
@@ -19,6 +20,12 @@ namespace Example.Service.Controllers
         public async Task<string> SayHelloAsync(GreetingCandidate candidate)
         {
             return $"{this.Phrases.Beginning}, {candidate.Name} from {candidate.City.Title}";
+        }
+
+        [SubscribedOn("new-group-appeared")]
+        public string SayHelloToGroup(IEnumerable<GreetingCandidate> candidates)
+        {
+            return "Hello guys";
         }
     }
 }

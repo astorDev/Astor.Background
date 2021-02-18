@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <PackageVersion>1.0.0.1</PackageVersion>
+        <PackageVersion>1.1.0.1</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,13 +24,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Astor.Background.Management.Protocol" Version="1.0.0" />
       <PackageReference Include="Astor.GreenPipes" Version="1.0.0" />
       <PackageReference Include="Astor.RabbitMq" Version="1.0.0" />
       <PackageReference Include="Astor.Reflection" Version="1.0.0" />
       <PackageReference Include="GreenPipes" Version="4.0.0" />
+      <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.2.3" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
+      <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.0.7" />
       <PackageReference Include="Telegram.Bot" Version="15.7.1" />
     </ItemGroup>
 

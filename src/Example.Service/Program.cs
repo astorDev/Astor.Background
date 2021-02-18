@@ -32,6 +32,7 @@ namespace Example.Service
                     services.AddSingleton<IHostedService, BackgroundService>();
                     var startup = new Startup(host.Configuration);
                     startup.ConfigureServices(services);
+                    startup.ConfigurePipeServices(services);
                     var pipeBuilder = new PipeBuilder<EventContext>(services);
                     startup.ConfigurePipe(pipeBuilder);
                     pipeBuilder.RegisterPipe();
