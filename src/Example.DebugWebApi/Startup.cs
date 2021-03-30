@@ -1,6 +1,7 @@
 using Astor.Background;
 using Astor.Background.Core;
 using Astor.Background.Core.Filters;
+using Astor.Background.Management;
 using Astor.Background.Management.Scraper;
 using Astor.GreenPipes;
 using Microsoft.AspNetCore.Builder;
@@ -56,7 +57,7 @@ namespace Example.DebugWebApi
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<CustomSwaggerMiddleware>();
+            app.UseMiddleware<BackgroundServiceBasedSwaggerMiddleware>();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Example.DebugWebApi v1"));
 
             app.UseExceptionHandler(errorApp =>

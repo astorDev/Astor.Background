@@ -20,7 +20,7 @@ namespace Astor.Background.Management.Scraper.Tests.Playground
         public void GeneratingSchema()
         {
             var generatorOptions = new SchemaGeneratorOptions();
-            var behavior = new NewtonsoftDataContractResolver(generatorOptions, new JsonSerializerSettings());
+            var behavior = new NewtonsoftDataContractResolver(new JsonSerializerSettings());
             var repo = new SchemaRepository();
 
             var generator = new SchemaGenerator(generatorOptions, behavior);

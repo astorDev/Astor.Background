@@ -1,17 +1,16 @@
-using System.Reflection;
 using System.Threading.Tasks;
 using Astor.Background.Management.Scraper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 
-namespace Example.DebugWebApi
+namespace Astor.Background.Management
 {
-    public class CustomSwaggerMiddleware
+    public class BackgroundServiceBasedSwaggerMiddleware
     {
         public OpenApiDocument Document { get; }
         public RequestDelegate RequestDelegate { get; }
 
-        public CustomSwaggerMiddleware(OpenApiDocument document, RequestDelegate requestDelegate)
+        public BackgroundServiceBasedSwaggerMiddleware(OpenApiDocument document, RequestDelegate requestDelegate)
         {
             this.Document = document;
             this.RequestDelegate = requestDelegate;

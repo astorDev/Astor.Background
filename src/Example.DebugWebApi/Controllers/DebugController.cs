@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Astor.Background;
 using Astor.Background.Core;
 using GreenPipes;
 using Microsoft.AspNetCore.Mvc;

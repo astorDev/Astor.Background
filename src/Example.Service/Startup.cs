@@ -26,7 +26,11 @@ namespace Example.Service
         {
             services.AddBackground(this.GetType().Assembly);
             services.AddRabbit(this.Configuration.GetSection("Rabbit"));
+            services.Configure<GreetingPhrases>(this.Configuration.GetSection("Phrases"));
+        }
 
+        public void ConfigurePipeServices(IServiceCollection services)
+        {
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(this.Configuration["Telegram:BotToken"]));
             services.AddSingleton(sp =>
             {
@@ -34,10 +38,8 @@ namespace Example.Service
                 var chatId = Int64.Parse(this.Configuration["Telegram:ChatId"]);
                 return new TelegramNotifier(botClient, chatId);
             });
-            
-            services.Configure<GreetingPhrases>(this.Configuration.GetSection("Phrases"));
         }
-
+        
         public void ConfigurePipe(PipeBuilder<EventContext> builder)
         {
             builder
