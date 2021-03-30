@@ -13,6 +13,8 @@ namespace Astor.Background.Core
         private Dictionary<string, Action> actions;
         public Dictionary<string, Action> Actions => this.actions ??= this.readActions();
         public IEnumerable<Type> ControllerTypes => this.Actions.Values.Select(a => a.Type).Distinct();
+
+        public IEnumerable<Type> InputTypes => this.Actions.Values.Select(a => a.InputType);
         
         public Service(Subscription[] subscriptions)
         {

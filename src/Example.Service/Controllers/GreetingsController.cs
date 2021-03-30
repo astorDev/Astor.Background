@@ -27,5 +27,18 @@ namespace Example.Service.Controllers
         {
             return "Hello guys";
         }
+
+        [SubscribedOn("somebody-entered-the-room")]
+        [SubscribedOn("bump-into-somebody-at-the-street")]
+        public string SayHelloCauseOfMultipleReasons(GreetingCandidate candidate)
+        {
+            return "Oh, huy";
+        }
+
+        [SubscribedOn("nicknamed-appeared")]
+        public string SayHelloAlternative(Example.Service.Models.Alternative.GreetingCandidate candidate)
+        {
+            return $"Hi, let me call you '{candidate.Nickname}'";
+        }
     }
 }
