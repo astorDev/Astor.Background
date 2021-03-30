@@ -7,8 +7,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Astor.Background.Core;
 using Astor.Background.Management.Protocol;
+using Astor.Background.Management.Utils;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Readers;
@@ -24,52 +26,45 @@ namespace Astor.Background.Management.Scraper
 {
     public static class Scraper
     {
+        public static readonly ISerializerDataContractResolver ContractResolver = new NewtonsoftDataContractResolver(new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        });
+        
+        public static readonly SchemaGeneratorOptions SchemaGeneratorOptions =  new SchemaGeneratorOptions
+        {
+            SchemaIdSelector = t => t.GetOpenApiId()
+        };
+
+        public static readonly SchemaGenerator SchemaGenerator = new(SchemaGeneratorOptions, ContractResolver);
+        
         public static ServiceDescription GetDescription(this Service service, OpenApiInfo info)
         {
-            var handlerArgs = service.Subscriptions.Select(s => s.Action.InputType);
             var repo = new SchemaRepository();
-            var generatorOptions = new SchemaGeneratorOptions
-            {
-                SchemaIdSelector = (t) => camelCase(t.Name)
-            };
-            var behavior = new NewtonsoftDataContractResolver(new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
-            var generator = new SchemaGenerator(generatorOptions, behavior);
 
-            foreach (var arg in handlerArgs)
+            foreach (var arg in service.InputTypes)
             {
-                generator.GenerateSchema(arg, repo);
+                SchemaGenerator.GenerateSchema(arg, repo);
             }
-            
-            var schemas = new Dictionary<string, JObject>();
 
-            foreach (var (key, value) in repo.Schemas)
+            var handlers = new Dictionary<string, HandlerDescription>();
+            foreach (var subscription in service.Subscriptions)
             {
-                using TextWriter tw = new StringWriter();
-                var oaw = new OpenApiJsonWriter(tw);
-                value.SerializeAsV3(oaw);
-                var s = tw.ToString();
-                var jo = JObject.Parse(s);
-
-                schemas.Add(key, jo);
+                handlers.TryAdd(subscription.Action.Id, new HandlerDescription
+                {
+                    Input = GetReferenceSchema(subscription.Action.InputType)
+                });
             }
             
             return new ServiceDescription
             {
                 Info = info,
-                Handlers = service.Subscriptions.ToDictionary(
-                    s => s.Action.Id, 
-                    s => new HandlerDescription
-                    {
-                        Input = GetSchema(s.Action.InputType)
-                    }),
-                Schemas = schemas
+                Handlers = handlers,
+                Schemas = repo.GetSchemasAsJObjects()
             };
         }
 
-        public static OpenApiSchema GetSchema(Type type)
+        public static OpenApiSchema GetReferenceSchema(Type type)
         {
             if (type.GetMethod("GetEnumerator") != null) 
             {
@@ -83,7 +78,7 @@ namespace Astor.Background.Management.Scraper
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.Schema,
-                            Id = camelCase(arrayType.Name)
+                            Id = arrayType.GetOpenApiId()
                         }
                     }
                 };
@@ -94,7 +89,7 @@ namespace Astor.Background.Management.Scraper
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.Schema,
-                    Id = camelCase(type.Name)
+                    Id = type.GetOpenApiId()
                 }
             };
         }
