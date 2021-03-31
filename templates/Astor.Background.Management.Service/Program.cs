@@ -14,6 +14,14 @@ namespace Astor.Background.Management.Service
     {
         public static Task Main(string[] args)
         {
+            var host = CreateHost(args);
+            host.Init();
+
+            return host.RunAsync();
+        }
+
+        public static IHost CreateHost(string[] args)
+        {
             var builder = new HostBuilder()
                 .ConfigureHostConfiguration(config =>
                 {
@@ -30,12 +38,7 @@ namespace Astor.Background.Management.Service
                     pipeBuilder.RegisterPipe();
                 });
 
-            var host = builder.UseConsoleLifetime().Build();
-
-            var channel = host.Services.GetRequiredService<IModel>();
-            channel.ExchangeDeclare(ExchangeNames.Logs, "fanout", true, false);
-            
-            return host.RunAsync();
+            return builder.UseConsoleLifetime().Build();
         }
     }
 }

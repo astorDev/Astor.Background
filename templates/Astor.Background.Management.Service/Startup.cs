@@ -25,8 +25,9 @@ namespace Example.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBackground(this.GetType().Assembly);
-            
-            services.AddRabbit(this.Configuration.GetConnectionString("Rabbit"));
+
+            var rabbitConnectionString = this.Configuration.GetConnectionString("Rabbit");
+            services.AddRabbit(rabbitConnectionString);
 
             services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(this.Configuration["Telegram:Token"]));
             services.AddSingleton(sp =>
