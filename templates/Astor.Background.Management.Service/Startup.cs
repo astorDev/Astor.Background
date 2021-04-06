@@ -29,7 +29,7 @@ namespace Example.Service
             var rabbitConnectionString = this.Configuration.GetConnectionString("Rabbit");
             services.AddRabbit(rabbitConnectionString);
 
-            services.AddSingleton<ITelegramBotClient>(new TelegramBotClient(this.Configuration["Telegram:Token"]));
+            services.AddSingleton<ITelegramBotClient>(sp => new TelegramBotClient(this.Configuration["Telegram:Token"]));
             services.AddSingleton(sp =>
             {
                 var botClient = sp.GetRequiredService<ITelegramBotClient>();

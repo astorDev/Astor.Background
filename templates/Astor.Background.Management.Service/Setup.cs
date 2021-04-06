@@ -11,6 +11,8 @@ namespace Astor.Background.Management.Service
         {
             var channel = host.Services.GetRequiredService<IModel>();
             channel.ExchangeDeclare(ExchangeNames.Logs, "fanout", true, false);
+            
+            
         }
     }
 }

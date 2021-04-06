@@ -5,6 +5,7 @@ using Astor.Background.Core;
 using GreenPipes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -15,36 +16,48 @@ namespace Astor.Background.RabbitMq
         public IModel Channel { get; }
         public IServiceProvider ServiceProvider { get; }
         public Service Service { get; }
+        public ILogger<BackgroundService> Logger { get; }
 
         public BackgroundService(IModel channel, 
             IServiceProvider serviceProvider, 
-            Service service)
+            Service service,
+            ILogger<BackgroundService> logger)
         {
             this.Channel = channel;
             this.ServiceProvider = serviceProvider;
             this.Service = service;
+            this.Logger = logger;
         }
         
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            foreach (var subscription in this.Service.Subscriptions)
+            try
             {
-                this.Channel.QueueDeclare(subscription.Action.Id, true, false, false);
-                this.Channel.QueueBind(subscription.Action.Id, subscription.Attribute.Event.ToString(), routingKey: "");
-
-                var consumer = new EventingBasicConsumer(this.Channel);
-
-                consumer.Received += async (sender, eventArgs) =>
+                foreach (var subscription in this.Service.Subscriptions)
                 {
-                    var context = new EventContext(subscription.Action, InputHelper.Parse(eventArgs));
+                    this.Channel.QueueDeclare(subscription.Action.Id, true, false, false);
+                    this.Channel.QueueBind(subscription.Action.Id, subscription.Attribute.Event.ToString(), routingKey: "");
 
-                    using var scope = this.ServiceProvider.CreateScope();
-                    var pipe = scope.ServiceProvider.GetRequiredService<IPipe<EventContext>>();
-                    await pipe.Send(context);
-                };
+                    var consumer = new EventingBasicConsumer(this.Channel);
 
-                this.Channel.BasicConsume(subscription.Action.Id, false, consumer);
+                    consumer.Received += async (sender, eventArgs) =>
+                    {
+                        var context = new EventContext(subscription.Action, InputHelper.Parse(eventArgs));
+
+                        using var scope = this.ServiceProvider.CreateScope();
+                        var pipe = scope.ServiceProvider.GetRequiredService<IPipe<EventContext>>();
+                        await pipe.Send(context);
+                    };
+
+                    this.Channel.BasicConsume(subscription.Action.Id, false, consumer);
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+
             
             return Task.CompletedTask;
         }

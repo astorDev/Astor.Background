@@ -20,9 +20,9 @@ namespace Astor.Background.Management.Service
             return host.RunAsync();
         }
 
-        public static IHost CreateHost(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var builder = new HostBuilder()
+            return new HostBuilder()
                 .ConfigureHostConfiguration(config =>
                 {
                     config.AddUserSecrets(typeof(Program).Assembly);
@@ -37,6 +37,11 @@ namespace Astor.Background.Management.Service
                     startup.ConfigurePipe(pipeBuilder);
                     pipeBuilder.RegisterPipe();
                 });
+        }
+        
+        public static IHost CreateHost(string[] args)
+        {
+            var builder = CreateHostBuilder(args);
 
             return builder.UseConsoleLifetime().Build();
         }
