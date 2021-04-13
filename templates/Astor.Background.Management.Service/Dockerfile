@@ -21,4 +21,5 @@ ENTRYPOINT dotnet Astor.Background.Management.Service.dll \
     --ConnectionStrings:Mongo=$MONGO_CONNECTIONSTRING \
     --Telegram:Token=$TELEGRAM_TOKEN \
     --Telegram:ChatId=$TELEGRAM_CHATID \
-    --Mongo:DbName=$MONGO_DBNAME
+    --Mongo:DbName=$MONGO_DBNAME \
+    --InternalExchangePrefix=$INTERNALEXCHANGEPREFIX

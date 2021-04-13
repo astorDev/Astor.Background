@@ -28,7 +28,7 @@ namespace Example.Service
             services.AddSingleton<Astor.Background.RabbitMq.Service>(sp =>
             {
                 var coreService = sp.GetRequiredService<Astor.Background.Core.Service>();
-                return Astor.Background.RabbitMq.Service.Create(coreService);
+                return Astor.Background.RabbitMq.Service.Create(coreService, this.Configuration["InternalExchangePrefix"]);
             });
 
             var rabbitConnectionString = this.Configuration.GetConnectionString("Rabbit");

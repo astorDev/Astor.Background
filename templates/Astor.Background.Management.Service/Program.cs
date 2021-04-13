@@ -13,18 +13,10 @@ namespace Astor.Background.Management.Service
 {
     public class Program
     {
-        public static Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            try
-            {
-                var host = CreateHost(args);
-                return host.RunAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                throw;
-            }
+            var host = CreateHost(args);
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
