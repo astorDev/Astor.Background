@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Astor.Background.Management.AspNetCoreUtils\Astor.Background.Management.AspNetCoreUtils.csproj" />
       <ProjectReference Include="..\Astor.Background\Astor.Background.csproj" />
       <ProjectReference Include="..\Example.Service\Example.Service.csproj" />
     </ItemGroup>
