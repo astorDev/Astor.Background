@@ -2,9 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FluentScheduler;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RabbitMQ.Client;
+using Newtonsoft.Json;
 
 namespace Astor.Background.Management.Service.Tests
 {
@@ -15,10 +14,8 @@ namespace Astor.Background.Management.Service.Tests
         public async Task RefreshEventsFromDb()
         {
             //TODO: create db record
-            
             var host = Test.StartHost();
             
-            var rabbitChannel = host.Services.GetRequiredService<IModel>();
             var cancellationToken = new CancellationTokenSource(TimeSpan.FromSeconds(5)).Token;
             Schedule schedule = null;
 
@@ -27,6 +24,8 @@ namespace Astor.Background.Management.Service.Tests
                 cancellationToken.ThrowIfCancellationRequested();
                 schedule = JobManager.GetSchedule("Test_Record");
             }
+            
+            Console.WriteLine(JsonConvert.SerializeObject(schedule));
         }
     }
 }

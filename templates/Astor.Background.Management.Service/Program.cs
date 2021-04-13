@@ -1,12 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Astor.Background.Core;
-using Astor.Background.Management.Protocol;
 using Astor.GreenPipes;
 using Example.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RabbitMQ.Client;
+using Microsoft.Extensions.Logging;
 
 namespace Astor.Background.Management.Service
 {
@@ -14,10 +15,16 @@ namespace Astor.Background.Management.Service
     {
         public static Task Main(string[] args)
         {
-            var host = CreateHost(args);
-            host.Init();
-
-            return host.RunAsync();
+            try
+            {
+                var host = CreateHost(args);
+                return host.RunAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
@@ -36,7 +43,8 @@ namespace Astor.Background.Management.Service
                     var pipeBuilder = new PipeBuilder<EventContext>(services);
                     startup.ConfigurePipe(pipeBuilder);
                     pipeBuilder.RegisterPipe();
-                });
+                })
+                .ConfigureLogging(logging => { logging.AddConsole();});
         }
         
         public static IHost CreateHost(string[] args)

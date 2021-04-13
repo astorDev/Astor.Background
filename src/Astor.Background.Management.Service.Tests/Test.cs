@@ -1,3 +1,4 @@
+using System;
 using Astor.Background.TelegramNotifications;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,23 +11,30 @@ namespace Astor.Background.Management.Service.Tests
     {
         public static IHost StartHost()
         {
-            var hostBuilder = Program.CreateHostBuilder(new[]
+            try
             {
-                "--ConnectionStrings:Rabbit=amqp://localhost:5672",
-                "--ConnectionStrings:Mongo=mongodb://localhost:27017"
-            });
+                var hostBuilder = Program.CreateHostBuilder(new[]
+                {
+                    "--ConnectionStrings:Rabbit=amqp://localhost:5672",
+                    "--ConnectionStrings:Mongo=mongodb://localhost:27017"
+                });
 
-            hostBuilder.ConfigureServices(s =>
+                hostBuilder.ConfigureServices(s =>
+                {
+                    s.AddSingleton(A.Fake<ITelegramBotClient>());
+                    s.AddSingleton(A.Fake<TelegramNotifier>());
+                });
+
+                var host = hostBuilder.UseConsoleLifetime().Build();
+                host.RunAsync();
+                
+                return host;
+            }
+            catch (Exception ex)
             {
-                s.AddSingleton(A.Fake<ITelegramBotClient>());
-                s.AddSingleton(A.Fake<TelegramNotifier>());
-            });
-
-            var host = hostBuilder.UseConsoleLifetime().Build();
-            host.Init();
-            host.RunAsync();
-
-            return host;
+                Console.WriteLine(ex);
+                throw;
+            }
         }
     }
 }

@@ -25,6 +25,11 @@ namespace Example.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBackground(this.GetType().Assembly);
+            services.AddSingleton<Astor.Background.RabbitMq.Service>(sp =>
+            {
+                var coreService = sp.GetRequiredService<Astor.Background.Core.Service>();
+                return Astor.Background.RabbitMq.Service.Create(coreService);
+            });
 
             var rabbitConnectionString = this.Configuration.GetConnectionString("Rabbit");
             services.AddRabbit(rabbitConnectionString);

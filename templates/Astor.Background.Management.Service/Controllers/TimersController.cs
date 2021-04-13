@@ -6,7 +6,7 @@ namespace Astor.Background.Management.Service.Controllers
 {
     public class TimersController
     {
-        [SubscribedOn("")]
+        [SubscribedOnInternal("started")]
         public void Refresh()
         {
             Console.WriteLine("refreshing timers");
