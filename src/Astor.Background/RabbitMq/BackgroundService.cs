@@ -45,9 +45,9 @@ namespace Astor.Background.RabbitMq
                     subscription.Register(this.Channel, this.ServiceProvider);
                 }
 
-                if (this.Service.InternalEventsForPublishing.Contains("created"))
+                if (this.Service.InternalEventsForPublishing.Contains(InternalEventNames.Started))
                 {
-                    this.Channel.PublishJson(this.Service.InternalExchangeName("created"), null);
+                    this.Channel.PublishJson(this.Service.InternalExchangeName(InternalEventNames.Started), null);
                 }
                 
             }

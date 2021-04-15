@@ -1,6 +1,7 @@
 using System;
 using Astor.Background.Core;
 using Astor.Background.Core.Filters;
+using Astor.Background.Management.Service.Timers;
 using Astor.Background.RabbitMq.Filters;
 using Astor.Background.TelegramNotifications;
 using Astor.GreenPipes;
@@ -49,6 +50,14 @@ namespace Example.Service
                 var dbName = this.Configuration["Mongo:DbName"] ?? "background";
                 
                 return client.GetDatabase(dbName);
+            });
+
+            services.AddSingleton<SchedulesStore>(sp =>
+            {
+                var mongodb = sp.GetRequiredService<IMongoDatabase>();
+                var mongoCollection = mongodb.GetCollection<ActionSchedule>("schedule");
+
+                return new SchedulesStore(mongoCollection);
             });
         }
 
