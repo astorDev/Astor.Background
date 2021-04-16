@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service.Tests", "Astor.Background.Management.Service.Tests\Astor.Background.Management.Service.Tests.csproj", "{7FD74725-D11E-4117-988C-782EDDECFC2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.AspNetCoreUtils", "Astor.Background.Management.AspNetCoreUtils\Astor.Background.Management.AspNetCoreUtils.csproj", "{0250ABA1-F506-4F60-8A6F-8050AC05EF64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,5 +80,9 @@ Global
 		{7FD74725-D11E-4117-988C-782EDDECFC2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD74725-D11E-4117-988C-782EDDECFC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FD74725-D11E-4117-988C-782EDDECFC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0250ABA1-F506-4F60-8A6F-8050AC05EF64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0250ABA1-F506-4F60-8A6F-8050AC05EF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0250ABA1-F506-4F60-8A6F-8050AC05EF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0250ABA1-F506-4F60-8A6F-8050AC05EF64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
