@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.RabbitMq", "Astor.Rab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reflection", "Astor.Reflection\Astor.Reflection.csproj", "{498E0C45-A613-4698-B537-3AED7FE1C625}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service", "..\templates\Astor.Background.Management.Service\Astor.Background.Management.Service.csproj", "{B4207249-21F1-48BD-BDA0-FB263807909A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service", "Astor.Background.Management.Service\Astor.Background.Management.Service.csproj", "{B4207249-21F1-48BD-BDA0-FB263807909A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service.Tests", "Astor.Background.Management.Service.Tests\Astor.Background.Management.Service.Tests.csproj", "{7FD74725-D11E-4117-988C-782EDDECFC2D}"
 EndProject

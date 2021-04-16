@@ -13,7 +13,7 @@ namespace Astor.Background.Management.Service
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        static async Task Main(string[] args)
         {
             var host = CreateHost(args);
             await host.RunAsync();
@@ -36,7 +36,12 @@ namespace Astor.Background.Management.Service
                     startup.ConfigurePipe(pipeBuilder);
                     pipeBuilder.RegisterPipe();
                 })
-                .ConfigureLogging(logging => { logging.AddConsole();});
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddConsole();
+                    logging.AddFilter("Microsoft", LogLevel.None);
+                    logging.SetMinimumLevel(LogLevel.Trace);
+                });
         }
         
         public static IHost CreateHost(string[] args)

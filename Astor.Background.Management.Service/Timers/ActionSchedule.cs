@@ -31,24 +31,14 @@ namespace Astor.Background.Management.Service.Timers
         [BsonIgnore]
         public IEnumerable<TimeSpan> EveryDayAt
         {
-            get => this.Times.Select(date => TimeSpan.ParseExact(date, "H:mm", CultureInfo.InvariantCulture));
+            get => this.Times.Select(date => TimeSpan.ParseExact(date, "hh\\:mm", CultureInfo.InvariantCulture));
             set
             {
                 if (value != null)
                 {
-                    this.Times = value.Select(t => t.ToString("H:mm", CultureInfo.InvariantCulture)).ToArray();
+                    this.Times = value.Select(t => t.ToString("hh\\:mm", CultureInfo.InvariantCulture)).ToArray();
                 }
             }
-        }
-        
-        public TimeSpan? GetInterval()
-        {
-            return this.IntervalInMilliseconds == null ? null : TimeSpan.FromMilliseconds(this.IntervalInMilliseconds.Value);
-        }
-
-        public IEnumerable<DateTime> GetTimes()
-        {
-            return this.Times.Select(date => DateTime.ParseExact(date, "H:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces));
         }
     }
 }

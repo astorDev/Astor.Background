@@ -98,11 +98,11 @@ namespace Astor.Background.Management.Service.Timers
                               });
         }
 
-        private void registerJob(string name, IEnumerable<TimeSpan> times)
+        private void registerJob(string name, IEnumerable<TimeSpan> actionTimes)
         {
-            this.times[name] = times;
+            this.times[name] = actionTimes;
 
-            foreach (var row in times.Select((time, i) => new { time, i }))
+            foreach (var row in actionTimes.Select((time, i) => new { time, i }))
             {
                 JobManager.AddJob(() => this.TimerEventAction(name),
                                   schedule =>

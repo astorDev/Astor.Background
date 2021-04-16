@@ -21,12 +21,25 @@ namespace Astor.Background.Management.Service.Tests
         
         public static IHost StartHost()
         {
-            var hostBuilder = Program.CreateHostBuilder(new[]
+            var host = GetValidatedHost();
+
+            host.RunAsync();
+            
+            return host;
+        }
+
+        public static IHost GetValidatedHost(params string[] additionalArgs)
+        {
+            var args = new List<string>()
             {
                 "--ConnectionStrings:Rabbit=amqp://localhost:5672",
                 "--ConnectionStrings:Mongo=mongodb://localhost:27017",
                 "--InternalExchangePrefix=my-autotests"
-            });
+            };
+            
+            args.AddRange(additionalArgs);
+            
+            var hostBuilder = Program.CreateHostBuilder(args.ToArray());
 
             hostBuilder.ConfigureServices(s =>
             {
@@ -40,8 +53,6 @@ namespace Astor.Background.Management.Service.Tests
             //They are silent because RunAsync is not awaited
             host.Services.GetService<IEnumerable<IHostedService>>();
 
-            host.RunAsync();
-            
             return host;
         }
     }
