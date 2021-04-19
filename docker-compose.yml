@@ -4,7 +4,7 @@ services:
   service:
     image: vosarat/background-management-service:2.0.0
     build:
-      context: .
+      context: src
       dockerfile: Astor.Background.Management.Service/Dockerfile
     environment:
       - RABBIT_CONNECTIONSTRING=amqp://rabbit:5672
