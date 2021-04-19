@@ -31,6 +31,8 @@
       <PackageReference Include="Astor.RabbitMq" Version="1.0.0" />
       <PackageReference Include="Astor.Reflection" Version="1.0.0" />
       <PackageReference Include="GreenPipes" Version="4.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
       <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.2.3" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
