@@ -38,8 +38,11 @@ namespace Astor.Background.Management.Service
                 })
                 .ConfigureLogging(logging =>
                 {
-                    logging.AddConsole();
-                    logging.AddFilter("Microsoft", LogLevel.None);
+                    logging.AddSimpleConsole(c =>
+                    {
+                        c.SingleLine = true;
+                    });
+                    logging.AddFilter("Microsoft", LogLevel.Information);
                     logging.SetMinimumLevel(LogLevel.Trace);
                 });
         }
