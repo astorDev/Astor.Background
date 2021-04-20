@@ -8,6 +8,7 @@ using Astor.GreenPipes;
 using Astor.RabbitMq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using RabbitMQ.Client;
 using Telegram.Bot;
@@ -59,6 +60,13 @@ namespace Example.Service
 
                 return new SchedulesStore(mongoCollection);
             });
+            
+            var pack = new ConventionPack();
+            pack.AddRange(new IConvention[]
+            {
+                new IgnoreExtraElementsConvention(true)
+            });
+            ConventionRegistry.Register("myConventions", pack, t => true);
         }
 
         public void ConfigurePipe(PipeBuilder<EventContext> builder)
