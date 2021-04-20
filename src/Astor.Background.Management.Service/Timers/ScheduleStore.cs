@@ -13,10 +13,19 @@ namespace Astor.Background.Management.Service.Timers
         {
             this.SchedulesCollection = schedulesCollection;
         }
-        
-        public async Task<ActionSchedule> AddAsync(ActionSchedule schedule)
+
+        public async Task<ActionSchedule> AddOrUpdateAsync(ActionSchedule schedule)
         {
-            await this.SchedulesCollection.InsertOneAsync(schedule);
+            if (await this.SchedulesCollection.Find(s => s.ActionId == schedule.ActionId)
+                .AnyAsync())
+            {
+                await this.SchedulesCollection.ReplaceOneAsync(s => s.ActionId == schedule.ActionId, schedule);
+            }
+            else
+            {
+                await this.SchedulesCollection.InsertOneAsync(schedule);
+            }
+
             return await this.SchedulesCollection.Find(s => s.ActionId == schedule.ActionId).SingleAsync();
         }
 

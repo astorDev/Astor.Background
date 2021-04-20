@@ -40,5 +40,43 @@ namespace Astor.Background.Management.Service.Timers
                 }
             }
         }
+
+        public IntervalAction ToIntervalActionOrNull()
+        {
+            if (this.Interval != null)
+            {
+                return new IntervalAction
+                {
+                    ActionId = this.ActionId,
+                    Interval = this.Interval.Value
+                };
+            }
+
+            return null;
+        }
+
+        public TimesAction ToTimesAction(int timezoneShift)
+        {
+            if (this.Times == null)
+            {
+                throw new InvalidOperationException($"cannot use {nameof(ToTimesAction)} when times is null");
+            }
+
+            var shiftedTimes = this.EveryDayAt.Select(t =>
+            {
+                return timezoneShift switch
+                {
+                    0 => t,
+                    < 0 => t.Subtract(TimeSpan.FromHours(Math.Abs(timezoneShift))),
+                    _ => t.Add(TimeSpan.FromHours(timezoneShift))
+                };
+            }).ToArray();
+
+            return new TimesAction
+            {
+                ActionId = this.ActionId,
+                Times = shiftedTimes
+            };
+        }
     }
 }

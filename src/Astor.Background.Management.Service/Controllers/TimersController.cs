@@ -11,57 +11,64 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using Telegram.Bot.Types.InlineQueryResults.Abstractions;
 
 namespace Astor.Background.Management.Service.Controllers
 {
     public class TimersController
     {
         public SchedulesStore Store { get; }
+        public IModel RabbitChannel { get; }
         public ILogger<TimersController> Logger { get; }
 
         private readonly Timers.Timers timers;
 
         private readonly int TimeZoneShift;
         
-        public TimersController(SchedulesStore store, IConfiguration configuration, IModel rabbitChannel, ILogger<TimersController> logger)
+        public TimersController(SchedulesStore store, IConfiguration configuration, IModel rabbitChannel, 
+            ILogger<TimersController> logger,
+            ILogger<TimeActionsCollection> timeActionsCollectionLogger,
+            ILogger<IntervalActionsCollection> intervalActionsCollectionLogger)
         {
             this.Store = store;
+            this.RabbitChannel = rabbitChannel;
             this.Logger = logger;
-            this.timers = new Timers.Timers(action =>
-            {
-                this.Logger.LogDebug($"{action} timer occured at {DateTime.Now}");
-                rabbitChannel.BasicPublish("", action);
-            });
+
+            var timeActionsCollection = new TimeActionsCollection(timeActionsCollectionLogger, this.TriggerAction);
+            var intervalActionsCollection = new IntervalActionsCollection(intervalActionsCollectionLogger, this.TriggerAction);
+            
+            this.timers = new Timers.Timers(intervalActionsCollection, timeActionsCollection);
 
             Int32.TryParse(configuration["TimeZoneShift"], out this.TimeZoneShift);
         }
-        
+
         [SubscribedOnInternal(InternalEventNames.Started)]
         public async Task RefreshAsync()
         {
             var schedule = await this.Store.GetAllAsync();
-
+            this.Logger.LogDebug($"{schedule.Count()} of schedules received - updating timers");
+            
             foreach (var row in schedule)
             {
-                if (row.Times != null)
+                var intervalAction = row.ToIntervalActionOrNull();
+                if (intervalAction != null)
                 {
-                    this.timers.EnsureValid(row.ActionId, row.EveryDayAt.Select(t =>
-                    {
-                        return this.TimeZoneShift switch
-                        {
-                            0 => t,
-                            < 0 => t.Subtract(TimeSpan.FromHours(Math.Abs(this.TimeZoneShift))),
-                            _ => t.Add(TimeSpan.FromHours(this.TimeZoneShift))
-                        };
-                    }));
+                    this.timers.Ensure(intervalAction);
                 }
                 else
                 {
-                    this.timers.EnsureValid(row.ActionId, row.Interval.Value);
+                    this.timers.Ensure(row.ToTimesAction(this.TimeZoneShift));
                 }
             }
             
             this.timers.EnsureOnly(schedule.Select(s => s.ActionId.ToString()));
         }
+
+        private void TriggerAction(string actionId)
+        {
+            this.Logger.LogDebug($"{actionId} timer occured at {DateTime.Now}");
+            this.RabbitChannel.BasicPublish("", actionId);
+        }
+        
     }
 }

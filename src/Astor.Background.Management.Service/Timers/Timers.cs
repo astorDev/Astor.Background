@@ -2,115 +2,73 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentScheduler;
+using Microsoft.Extensions.Logging;
 
 namespace Astor.Background.Management.Service.Timers
 {
     public class Timers
     {
-        public Action<string> TimerEventAction { get; }
-        
-        private readonly Dictionary<string, TimeSpan> intervals = new();
+        public IntervalActionsCollection IntervalActions { get; }
+        public TimeActionsCollection TimeActionsCollection { get; }
 
-        private readonly Dictionary<string, IEnumerable<TimeSpan>> times = new();
-
-        public Timers(Action<string> timerEventAction)
+        public Timers(IntervalActionsCollection intervalActions, TimeActionsCollection timeActionsCollection)
         {
-            this.TimerEventAction = timerEventAction;
+            this.IntervalActions = intervalActions;
+            this.TimeActionsCollection = timeActionsCollection;
         }
         
-        public void EnsureValid(string name, TimeSpan interval)
+        public void Ensure(IntervalAction intervalAction)
         {
-            this.ensureValid(
-                name, 
-                interval, 
-                this.registerJob, 
-                this.removePeriodic, 
-                timeSpanValue => this.intervals[name] != timeSpanValue);
-        }
-
-        public void EnsureValid(string name, IEnumerable<TimeSpan> times)
-        {
-            this.ensureValid(
-                name, 
-                times, 
-                this.registerJob, 
-                this.removeTimes, 
-                timeValues =>
-                {
-                    var current = this.times[name];
-                    return !current.SequenceEqual(timeValues);
-                });
-        }
-
-        private void ensureValid<T> (string name, T obj, Action<string, T> register, Action<string> remove, Func<T, bool> valueChanged)
-        {
-            var schedule = JobManager.AllSchedules.FirstOrDefault(s => s.Name.StartsWith($"{name}_"));
-
-            if (schedule == null)
+            var existing = this.IntervalActions.Search(intervalAction.ActionId);
+            if (existing == null)
             {
-                register(name, obj);
+                this.IntervalActions.Add(intervalAction);
+                return;
             }
 
-            if (valueChanged(obj))
+            if (existing.Interval != intervalAction.Interval)
             {
-                remove(name);
-                register(name, obj);
+                this.IntervalActions.Remove(intervalAction.ActionId);
+                this.IntervalActions.Add(intervalAction);
             }
         }
 
-        private void removeTimes(string name)
+        public void Ensure(TimesAction timesAction)
         {
-            foreach (var schedule in JobManager.AllSchedules.Where(s => s.Name.StartsWith($"{name}_")))
+            var existing = this.TimeActionsCollection.Get(timesAction.ActionId);
+            if (!existing.Any())
             {
-                JobManager.RemoveJob(schedule.Name);
+                this.TimeActionsCollection.Add(timesAction);
+                return;
+            }
+
+            var superfluous = existing.Where(e => !timesAction.Times.Any(t => e.TimeOfDay == t));
+            foreach (var existingTime in superfluous)
+            {
+                this.TimeActionsCollection.Remove(existingTime.Id);
+            }
+
+            var missedTimes = timesAction.Times.Where(t => !existing.Any(r => r.TimeOfDay == t));
+            foreach (var missed in missedTimes)
+            {
+                this.TimeActionsCollection.Add(timesAction.ActionId, missed);
             }
         }
-        
-        private void removePeriodic(string name)
-        {
-            JobManager.RemoveJob(name);
-        }
 
-        public void EnsureOnly(IEnumerable<string> names)
+        public void EnsureOnly(IEnumerable<string> actionIds)
         {
-            var superfluous = this.intervals.Keys.Where(k => !names.Contains(k));
-            foreach (var name in superfluous)
+            var intervalActionIds = this.IntervalActions.GetAllActionIds();
+            var superfluous = intervalActionIds.Where(id => !actionIds.Contains(id));
+            foreach (var superfluousIntervalActionId in superfluous)
             {
-                this.removeJob(name);
+                this.IntervalActions.Remove(superfluousIntervalActionId);
             }
-        }
 
-        private void removeJob(string name)
-        {
-            this.intervals.Remove(name);
-            JobManager.RemoveJob(name);
-        }
-        
-        private void registerJob(string name, TimeSpan interval)
-        {
-            this.intervals[name] = interval;
-            JobManager.AddJob(() => this.TimerEventAction(name),
-                              schedule =>
-                              {
-                                  schedule.WithName($"{name}_0")
-                                          .ToRunEvery((int)interval.TotalMilliseconds)
-                                          .Milliseconds();
-                              });
-        }
-
-        private void registerJob(string name, IEnumerable<TimeSpan> actionTimes)
-        {
-            this.times[name] = actionTimes;
-
-            foreach (var row in actionTimes.Select((time, i) => new { time, i }))
+            var timeActionIds = this.TimeActionsCollection.GetAllActionIds();
+            var superfluousTimes = intervalActionIds.Where(id => !actionIds.Contains(id));
+            foreach (var superfluousTImeActionId in superfluous)
             {
-                JobManager.AddJob(() => this.TimerEventAction(name),
-                                  schedule =>
-                                  {
-                                      schedule.WithName($"{name}_{row.i}")
-                                              .ToRunEvery(1).Days()
-                                              .At(row.time.Hours, row.time.Minutes);
-                                  });
+                this.TimeActionsCollection.Remove(superfluousTImeActionId);
             }
         }
     }
