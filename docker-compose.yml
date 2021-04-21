@@ -2,7 +2,7 @@ version: '3.9'
 
 services: 
   service:
-    image: vosarat/background-management-service:2.0.0.4
+    image: vosarat/background-management-service:2.0.0.6
     build:
       context: src
       dockerfile: Astor.Background.Management.Service/Dockerfile
@@ -24,4 +24,4 @@ services:
   mongo:
     image: mongo
     ports:
-      - 27017:27017
+      - 27018:27017

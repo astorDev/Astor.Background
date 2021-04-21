@@ -10,11 +10,16 @@ namespace Astor.Background.Management.Service.Timers
     {
         public IntervalActionsCollection IntervalActions { get; }
         public TimeActionsCollection TimeActionsCollection { get; }
+        public ILogger<Timers> Logger { get; }
 
-        public Timers(IntervalActionsCollection intervalActions, TimeActionsCollection timeActionsCollection)
+        public Timers(
+            IntervalActionsCollection intervalActions, 
+            TimeActionsCollection timeActionsCollection,
+            ILogger<Timers> logger)
         {
             this.IntervalActions = intervalActions;
             this.TimeActionsCollection = timeActionsCollection;
+            this.Logger = logger;
         }
         
         public void Ensure(IntervalAction intervalAction)
@@ -22,12 +27,16 @@ namespace Astor.Background.Management.Service.Timers
             var existing = this.IntervalActions.Search(intervalAction.ActionId);
             if (existing == null)
             {
+                this.Logger.LogDebug($"no interval action was found by actionId {intervalAction.ActionId} - adding new one");
+                
                 this.IntervalActions.Add(intervalAction);
                 return;
             }
 
             if (existing.Interval != intervalAction.Interval)
             {
+                this.Logger.LogDebug($"updating interval for actionId {intervalAction.ActionId} from {existing.Interval} to {intervalAction.Interval}");
+                
                 this.IntervalActions.Remove(intervalAction.ActionId);
                 this.IntervalActions.Add(intervalAction);
             }

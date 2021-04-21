@@ -28,7 +28,8 @@ namespace Astor.Background.Management.Service.Controllers
         public TimersController(SchedulesStore store, IConfiguration configuration, IModel rabbitChannel, 
             ILogger<TimersController> logger,
             ILogger<TimeActionsCollection> timeActionsCollectionLogger,
-            ILogger<IntervalActionsCollection> intervalActionsCollectionLogger)
+            ILogger<IntervalActionsCollection> intervalActionsCollectionLogger,
+            ILogger<Timers.Timers> timersLogger)
         {
             this.Store = store;
             this.RabbitChannel = rabbitChannel;
@@ -37,7 +38,7 @@ namespace Astor.Background.Management.Service.Controllers
             var timeActionsCollection = new TimeActionsCollection(timeActionsCollectionLogger, this.TriggerAction);
             var intervalActionsCollection = new IntervalActionsCollection(intervalActionsCollectionLogger, this.TriggerAction);
             
-            this.timers = new Timers.Timers(intervalActionsCollection, timeActionsCollection);
+            this.timers = new Timers.Timers(intervalActionsCollection, timeActionsCollection, timersLogger);
 
             Int32.TryParse(configuration["TimeZoneShift"], out this.TimeZoneShift);
         }

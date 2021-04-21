@@ -146,10 +146,13 @@ namespace Astor.Background.Management.Service.Tests
                 ActionId = actionId,
                 Interval = TimeSpan.FromSeconds(1)
             });
-            
-            var controller = host.Services.GetRequiredService<TimersController>();
-            await controller.RefreshAsync();
-            
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var controller = scope.ServiceProvider.GetRequiredService<TimersController>();
+                await controller.RefreshAsync();
+            }
+
             var cancellationTokenFirst = new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token;
 
             while (counter != 3)
@@ -163,8 +166,13 @@ namespace Astor.Background.Management.Service.Tests
                 ActionId = actionId,
                 Interval = TimeSpan.FromSeconds(3)
             });
-            
-            await controller.RefreshAsync();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var controller = scope.ServiceProvider.GetRequiredService<TimersController>();
+                await controller.RefreshAsync();
+            }
+
             counter = 0;
 
             var cancellationTokenTwo = new CancellationTokenSource(TimeSpan.FromSeconds(9)).Token;
