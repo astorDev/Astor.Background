@@ -22,14 +22,14 @@ namespace Astor.Background.Management.Service.Timers
             this.Logger = logger;
         }
         
-        public void Ensure(IntervalAction intervalAction)
+        public void Ensure(IntervalAction intervalAction, Action<string> action)
         {
             var existing = this.IntervalActions.Search(intervalAction.ActionId);
             if (existing == null)
             {
                 this.Logger.LogDebug($"no interval action was found by actionId {intervalAction.ActionId} - adding new one");
                 
-                this.IntervalActions.Add(intervalAction);
+                this.IntervalActions.Add(intervalAction, action);
                 return;
             }
 
@@ -38,30 +38,43 @@ namespace Astor.Background.Management.Service.Timers
                 this.Logger.LogDebug($"updating interval for actionId {intervalAction.ActionId} from {existing.Interval} to {intervalAction.Interval}");
                 
                 this.IntervalActions.Remove(intervalAction.ActionId);
-                this.IntervalActions.Add(intervalAction);
+                this.IntervalActions.Add(intervalAction, action);
             }
         }
 
-        public void Ensure(TimesAction timesAction)
+        public void Ensure(TimesAction timesAction, Action<string> action)
         {
             var existing = this.TimeActionsCollection.Get(timesAction.ActionId);
             if (!existing.Any())
             {
-                this.TimeActionsCollection.Add(timesAction);
+                this.Logger.LogDebug($"no time for action {timesAction.ActionId} - adding few");
+                
+                this.TimeActionsCollection.Add(timesAction, action);
                 return;
             }
 
             var superfluous = existing.Where(e => !timesAction.Times.Any(t => e.TimeOfDay == t));
-            foreach (var existingTime in superfluous)
+            if (superfluous.Any())
             {
-                this.TimeActionsCollection.Remove(existingTime.Id);
+                this.Logger.LogDebug($"found superfluous times for action {timesAction.ActionId} - removing them");
+                
+                foreach (var existingTime in superfluous)
+                {
+                    this.TimeActionsCollection.Remove(existingTime.Id);
+                }
             }
 
             var missedTimes = timesAction.Times.Where(t => !existing.Any(r => r.TimeOfDay == t));
-            foreach (var missed in missedTimes)
+            if (missedTimes.Any())
             {
-                this.TimeActionsCollection.Add(timesAction.ActionId, missed);
+                this.Logger.LogDebug($"found missing times for action {timesAction.ActionId} - adding them");
+                
+                foreach (var missed in missedTimes)
+                {
+                    this.TimeActionsCollection.Add(timesAction.ActionId, missed, action);
+                }
             }
+            
         }
 
         public void EnsureOnly(IEnumerable<string> actionIds)

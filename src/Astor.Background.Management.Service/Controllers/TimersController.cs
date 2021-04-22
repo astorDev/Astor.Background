@@ -19,28 +19,23 @@ namespace Astor.Background.Management.Service.Controllers
     {
         public SchedulesStore Store { get; }
         public IModel RabbitChannel { get; }
+        public Timers.Timers Timers { get; }
         public ILogger<TimersController> Logger { get; }
-
-        private readonly Timers.Timers timers;
-
-        private readonly int TimeZoneShift;
         
-        public TimersController(SchedulesStore store, IConfiguration configuration, IModel rabbitChannel, 
-            ILogger<TimersController> logger,
-            ILogger<TimeActionsCollection> timeActionsCollectionLogger,
-            ILogger<IntervalActionsCollection> intervalActionsCollectionLogger,
-            ILogger<Timers.Timers> timersLogger)
+        private readonly int timeZoneShift;
+        
+        public TimersController(SchedulesStore store, 
+            IConfiguration configuration, 
+            IModel rabbitChannel,
+            Timers.Timers timers,
+            ILogger<TimersController> logger)
         {
             this.Store = store;
             this.RabbitChannel = rabbitChannel;
+            this.Timers = timers;
             this.Logger = logger;
 
-            var timeActionsCollection = new TimeActionsCollection(timeActionsCollectionLogger, this.TriggerAction);
-            var intervalActionsCollection = new IntervalActionsCollection(intervalActionsCollectionLogger, this.TriggerAction);
-            
-            this.timers = new Timers.Timers(intervalActionsCollection, timeActionsCollection, timersLogger);
-
-            Int32.TryParse(configuration["TimeZoneShift"], out this.TimeZoneShift);
+            Int32.TryParse(configuration["TimeZoneShift"], out this.timeZoneShift);
         }
 
         [SubscribedOnInternal(InternalEventNames.Started)]
@@ -51,18 +46,19 @@ namespace Astor.Background.Management.Service.Controllers
             
             foreach (var row in schedule)
             {
-                var intervalAction = row.ToIntervalActionOrNull();
-                if (intervalAction != null)
+                var timesAction = row.ToTimesActionOrNull(this.timeZoneShift);
+                
+                if (timesAction != null)
                 {
-                    this.timers.Ensure(intervalAction);
+                    this.Timers.Ensure(timesAction, this.TriggerAction);
                 }
                 else
                 {
-                    this.timers.Ensure(row.ToTimesAction(this.TimeZoneShift));
+                    this.Timers.Ensure(row.ToIntervalAction(), this.TriggerAction);
                 }
             }
             
-            this.timers.EnsureOnly(schedule.Select(s => s.ActionId.ToString()));
+            this.Timers.EnsureOnly(schedule.Select(s => s.ActionId.ToString()));
         }
 
         private void TriggerAction(string actionId)

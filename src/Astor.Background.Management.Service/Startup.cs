@@ -52,14 +52,18 @@ namespace Example.Service
                 
                 return client.GetDatabase(dbName);
             });
-
-            services.AddSingleton<SchedulesStore>(sp =>
+            
+            services.AddSingleton(sp =>
             {
                 var mongodb = sp.GetRequiredService<IMongoDatabase>();
                 var mongoCollection = mongodb.GetCollection<ActionSchedule>("schedule");
 
                 return new SchedulesStore(mongoCollection);
             });
+
+            services.AddSingleton<IntervalActionsCollection>();
+            services.AddSingleton<TimeActionsCollection>();
+            services.AddSingleton<Timers>();
             
             var pack = new ConventionPack();
             pack.AddRange(new IConvention[]

@@ -41,7 +41,7 @@ namespace Astor.Background.Management.Service.Timers
             }
         }
 
-        public IntervalAction ToIntervalActionOrNull()
+        public IntervalAction ToIntervalAction()
         {
             if (this.Interval != null)
             {
@@ -52,14 +52,14 @@ namespace Astor.Background.Management.Service.Timers
                 };
             }
 
-            return null;
+            throw new InvalidOperationException($"cannot use {nameof(ToIntervalAction)} when times is null");
         }
 
-        public TimesAction ToTimesAction(int timezoneShift)
+        public TimesAction ToTimesActionOrNull(int timezoneShift)
         {
             if (this.Times == null)
             {
-                throw new InvalidOperationException($"cannot use {nameof(ToTimesAction)} when times is null");
+                return null;
             }
 
             var shiftedTimes = this.EveryDayAt.Select(t =>

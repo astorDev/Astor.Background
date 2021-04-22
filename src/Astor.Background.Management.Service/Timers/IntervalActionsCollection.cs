@@ -9,17 +9,15 @@ namespace Astor.Background.Management.Service.Timers
     public class IntervalActionsCollection
     {
         public ILogger<IntervalActionsCollection> Logger { get; }
-        public Action<string> Action { get; }
 
         private readonly List<IntervalAction> innerCollection = new();
 
-        public IntervalActionsCollection(ILogger<IntervalActionsCollection> logger, Action<string> action)
+        public IntervalActionsCollection(ILogger<IntervalActionsCollection> logger)
         {
             this.Logger = logger;
-            this.Action = action;
         }
 
-        public void Add(IntervalAction intervalAction)
+        public void Add(IntervalAction intervalAction, Action<string> action)
         {
             if (this.Any(intervalAction.ActionId))
             {
@@ -29,7 +27,7 @@ namespace Astor.Background.Management.Service.Timers
             this.innerCollection.Add(intervalAction);
             
             this.Logger.LogDebug($"adding timer job {intervalAction.ActionId} with interval {intervalAction.Interval}");
-            JobManager.AddJob(() => this.Action(intervalAction.ActionId),
+            JobManager.AddJob(() => action(intervalAction.ActionId),
                 schedule =>
                 {
                     schedule.WithName(intervalAction.ActionId)

@@ -2,7 +2,7 @@ version: '3.9'
 
 services: 
   service:
-    image: vosarat/background-management-service:2.0.0.6
+    image: vosarat/background-management-service:2.0.0.9
     build:
       context: src
       dockerfile: Astor.Background.Management.Service/Dockerfile
