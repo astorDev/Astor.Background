@@ -30,8 +30,6 @@ namespace Astor.Background.Management.Service.Timers
             }
         }
 
-
-
         public void Add(string actionId, TimeSpan timeOfDay, Action<string> action)
         {
             var number = this.Get(actionId).Max(a => a.Number) + 1;
@@ -43,9 +41,9 @@ namespace Astor.Background.Management.Service.Timers
             }, action);
         }
 
-        public IEnumerable<TimeAction> Get(string actionId)
+        public TimeAction[] Get(string actionId)
         {
-            return this.innerCollection.Where(e => e.ActionId == actionId);
+            return this.innerCollection.Where(e => e.ActionId == actionId).ToArray();
         }
 
         public IEnumerable<string> GetAllActionIds()
