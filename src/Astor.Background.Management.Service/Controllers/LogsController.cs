@@ -1,7 +1,6 @@
-using System;
 using System.Threading.Tasks;
-using Astor.Background.Core.Abstractions;
 using Astor.Background.Management.Protocol;
+using Astor.Background.RabbitMq.Abstractions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
@@ -17,7 +16,7 @@ namespace Astor.Background.Management.Service.Controllers
             this.Db = db;
         }
         
-        [SubscribedOn(ExchangeNames.Logs)]
+        [SubscribedOn(ExchangeNames.Logs, DeclareExchange = true)]
         public async Task Save(ActionResultCandidate resultCandidate)
         {
             var collection = this.Db.GetCollection<object>(resultCandidate.ActionId);

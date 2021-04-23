@@ -2,15 +2,17 @@ version: '3.9'
 
 services: 
   service:
-    image: vosarat/background-management-service:1.0.0.2
-    restart: always
+    image: vosarat/background-management-service:2.0.0.10
     build:
-      context: Astor.Background.Management.Service
+      context: src
+      dockerfile: Astor.Background.Management.Service/Dockerfile
     environment:
       - RABBIT_CONNECTIONSTRING=amqp://rabbit:5672
       - MONGO_CONNECTIONSTRING=mongodb://mongo:27017
       - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
       - TELEGRAM_CHATID=${TELEGRAM_CHATID}
+      - INTERNALEXCHANGEPREFIX=my-docker
+      - TIMEZONESHIFT=3
     depends_on: 
       - rabbit
       - mongo
@@ -22,4 +24,4 @@ services:
   mongo:
     image: mongo
     ports:
-      - 27017:27017
+      - 27018:27017

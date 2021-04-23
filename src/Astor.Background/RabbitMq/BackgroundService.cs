@@ -1,10 +1,15 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Astor.Background.Core;
+using Astor.Background.RabbitMq.Abstractions;
+using Astor.RabbitMq;
 using GreenPipes;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -15,35 +20,41 @@ namespace Astor.Background.RabbitMq
         public IModel Channel { get; }
         public IServiceProvider ServiceProvider { get; }
         public Service Service { get; }
+        public ILogger<BackgroundService> Logger { get; }
+        public IConfiguration Configuration { get; }
 
         public BackgroundService(IModel channel, 
             IServiceProvider serviceProvider, 
-            Service service)
+            Service service,
+            ILogger<BackgroundService> logger,
+            IConfiguration configuration)
         {
             this.Channel = channel;
             this.ServiceProvider = serviceProvider;
             this.Service = service;
+            this.Logger = logger;
+            this.Configuration = configuration;
         }
         
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            foreach (var subscription in this.Service.Subscriptions)
+            try
             {
-                this.Channel.QueueDeclare(subscription.Action.Id, true, false, false);
-                this.Channel.QueueBind(subscription.Action.Id, subscription.Attribute.Event.ToString(), routingKey: "");
-
-                var consumer = new EventingBasicConsumer(this.Channel);
-
-                consumer.Received += async (sender, eventArgs) =>
+                foreach (var subscription in this.Service.Subscriptions)
                 {
-                    var context = new EventContext(subscription.Action, InputHelper.Parse(eventArgs));
+                    subscription.Register(this.Channel, this.ServiceProvider);
+                }
 
-                    using var scope = this.ServiceProvider.CreateScope();
-                    var pipe = scope.ServiceProvider.GetRequiredService<IPipe<EventContext>>();
-                    await pipe.Send(context);
-                };
-
-                this.Channel.BasicConsume(subscription.Action.Id, false, consumer);
+                if (this.Service.InternalEventsForPublishing.Contains(InternalEventNames.Started))
+                {
+                    this.Channel.PublishJson(this.Service.InternalExchangeName(InternalEventNames.Started), null);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogCritical(ex, "exception occured while starting background service");
+                throw;
             }
             
             return Task.CompletedTask;

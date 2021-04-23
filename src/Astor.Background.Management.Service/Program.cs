@@ -1,28 +1,27 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Astor.Background.Core;
-using Astor.Background.Management.Protocol;
 using Astor.GreenPipes;
 using Example.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RabbitMQ.Client;
+using Microsoft.Extensions.Logging;
 
 namespace Astor.Background.Management.Service
 {
     public class Program
     {
-        public static Task Main(string[] args)
+        static async Task Main(string[] args)
         {
             var host = CreateHost(args);
-            host.Init();
-
-            return host.RunAsync();
+            await host.RunAsync();
         }
 
-        public static IHost CreateHost(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var builder = new HostBuilder()
+            return new HostBuilder()
                 .ConfigureHostConfiguration(config =>
                 {
                     config.AddUserSecrets(typeof(Program).Assembly);
@@ -36,7 +35,21 @@ namespace Astor.Background.Management.Service
                     var pipeBuilder = new PipeBuilder<EventContext>(services);
                     startup.ConfigurePipe(pipeBuilder);
                     pipeBuilder.RegisterPipe();
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddSimpleConsole(c =>
+                    {
+                        c.SingleLine = true;
+                    });
+                    logging.AddFilter("Microsoft", LogLevel.Information);
+                    logging.SetMinimumLevel(LogLevel.Trace);
                 });
+        }
+        
+        public static IHost CreateHost(string[] args)
+        {
+            var builder = CreateHostBuilder(args);
 
             return builder.UseConsoleLifetime().Build();
         }
