@@ -25,7 +25,6 @@ namespace Astor.RabbitMq.Tests
             });
             
             channel.BasicPublish("", queueName, null, null);
-            Console.WriteLine(processed);
             await Waiting.For(() => processed, TimeSpan.FromSeconds(2));
         }
 
