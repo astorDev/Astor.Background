@@ -14,6 +14,11 @@ namespace Astor.Background.Management.Service.Timers
             this.SchedulesCollection = schedulesCollection;
         }
 
+        public async Task RemoveByReceiverAsync(string receiver)
+        {
+            await this.SchedulesCollection.DeleteManyAsync((a) => a.Receiver == receiver);
+        }
+        
         public async Task<ActionSchedule> AddOrUpdateAsync(ActionSchedule schedule)
         {
             if (await this.SchedulesCollection.Find(s => s.ActionId == schedule.ActionId)

@@ -12,6 +12,8 @@ namespace Astor.Background.Management.Service.Timers
         public string ActionId { get; set; }
         
         public int?  IntervalInMilliseconds { get; set; }
+        
+        public string Receiver { get; set; }
 
         [BsonIgnore]
         public TimeSpan? Interval
