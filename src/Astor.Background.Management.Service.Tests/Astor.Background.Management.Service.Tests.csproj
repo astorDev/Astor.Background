@@ -16,7 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Astor.Background.Management.Service\Astor.Background.Management.Service.csproj" />
-      <ProjectReference Include="..\Astor.RabbitMq\Astor.RabbitMq.csproj" />
+      <ProjectReference Include="..\Astor.Tests\Astor.Tests.csproj" />
     </ItemGroup>
 
 </Project>

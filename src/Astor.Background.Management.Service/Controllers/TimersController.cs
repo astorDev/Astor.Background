@@ -61,7 +61,7 @@ namespace Astor.Background.Management.Service.Controllers
         [RabbitMq.Abstractions.SubscribedOn(ExchangeNames.Logs, DeclareExchange = true)]
         public async Task EnsureScheduleAsync(ReceiverSchedule receiverSchedule)
         {
-            //await this.Store.RemoveByReceiverAsync(receiverSchedule.Receiver);
+            await this.Store.RemoveByReceiverAsync(receiverSchedule.Receiver);
             foreach (var actionSchedule in receiverSchedule.ActionSchedules)
             {
                 await this.Store.AddOrUpdateAsync(new ActionSchedule

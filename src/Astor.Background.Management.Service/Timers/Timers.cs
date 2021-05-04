@@ -24,6 +24,8 @@ namespace Astor.Background.Management.Service.Timers
         
         public void Ensure(IntervalAction intervalAction, Action<string> action)
         {
+            this.TimeActionsCollection.RemoveByActionId(intervalAction.ActionId);
+
             var existing = this.IntervalActions.Search(intervalAction.ActionId);
             if (existing == null)
             {
@@ -44,6 +46,8 @@ namespace Astor.Background.Management.Service.Timers
 
         public void Ensure(TimesAction timesAction, Action<string> action)
         {
+            this.IntervalActions.Remove(timesAction.ActionId);
+            
             var existing = this.TimeActionsCollection.Get(timesAction.ActionId);
             if (!existing.Any())
             {
@@ -87,10 +91,10 @@ namespace Astor.Background.Management.Service.Timers
             }
 
             var timeActionIds = this.TimeActionsCollection.GetAllActionIds();
-            var superfluousTimes = intervalActionIds.Where(id => !actionIds.Contains(id));
-            foreach (var superfluousTImeActionId in superfluous)
+            var superfluousTimes = timeActionIds.Where(id => !actionIds.Contains(id));
+            foreach (var superfluousTImeActionId in superfluousTimes)
             {
-                this.TimeActionsCollection.Remove(superfluousTImeActionId);
+                this.TimeActionsCollection.RemoveByActionId(superfluousTImeActionId);
             }
         }
     }

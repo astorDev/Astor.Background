@@ -49,9 +49,9 @@ namespace Astor.Background.Management.Service.Timers
             return this.innerCollection.SingleOrDefault(a => a.ActionId == actionId);
         }
 
-        public IEnumerable<string> GetAllActionIds()
+        public string[] GetAllActionIds()
         {
-            return this.innerCollection.Select(e => e.ActionId);
+            return this.innerCollection.Select(e => e.ActionId).ToArray();
         }
         
         public bool Any(string actionId)

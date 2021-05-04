@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Astor.Background.Management.Protocol;
 using Astor.Background.Management.Service.Controllers;
 using Astor.RabbitMq;
+using Astor.Tests;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RabbitMQ.Client;
@@ -67,6 +68,62 @@ namespace Astor.Background.Management.Service.Tests
         }
 
         [TestMethod]
+        [Ignore("long running - about 1 minutes")]
+        public async Task HandleSwitchingFromIntervalToTimes()
+        {
+            var queueName = "Timers_EnsureSchedule_Should_HandleSwitchingFromIntervalToTimes";
+
+            var bumpsCount = 0;
+            
+            var host = GetValidatedHost();
+
+            var channel = host.Services.GetRequiredService<IModel>();
+            channel.DeclareAndConsumeQueue(queueName, (sender, args) => bumpsCount++);
+
+            var controller = host.Services.GetRequiredService<TimersController>();
+            await controller.EnsureScheduleAsync(new ReceiverSchedule
+            {
+                Receiver = "Timers_EnsureSchedule_Should_HandleSwitchingFromIntervalToTimes",
+                ActionSchedules = new[]
+                {
+                    new ActionSchedule
+                    {
+                        ActionId = queueName,
+                        Interval = TimeSpan.FromSeconds(2)
+                    }
+                }
+            });
+
+            await Waiting.For(() => bumpsCount > 0, TimeSpan.FromSeconds(5));
+
+            await controller.EnsureScheduleAsync(new ReceiverSchedule
+            {
+                Receiver = "Timers_EnsureSchedule_Should_HandleSwitchingFromIntervalToTimes",
+                ActionSchedules = new[]
+                {
+                    new ActionSchedule
+                    {
+                        ActionId = queueName,
+                        EveryDayAt = new[]
+                        {
+                            DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1))
+                        }
+                    }
+                }
+            });
+
+            bumpsCount = 0;
+            var token = new CancellationTokenSource(TimeSpan.FromMinutes(1)).Token;
+            while (!token.IsCancellationRequested)
+            {
+                await Task.Delay(100);
+            }
+            
+            Assert.AreEqual(1, bumpsCount);
+        }
+
+        [TestMethod]
+        [Ignore("super long running - about 3 minutes")]
         public async Task StartAndUpdateCombinedTimers()
         {
             var q1Name = "q1";
@@ -116,8 +173,50 @@ namespace Astor.Background.Management.Service.Tests
                 }
             });
             
+            var token = new CancellationTokenSource(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(1))).Token;
+            while (!token.IsCancellationRequested)
+            {
+                await Task.Delay(100);
+            }
             
+            Assert.AreEqual(30, q1Count);
+            Assert.AreEqual(1, q2Count);
+            Assert.AreEqual(1, q3Count);
+
+            q1Count = 0;
+            q2Count = 0;
+            q3Count = 0;
             
+            await controller.EnsureScheduleAsync(new ReceiverSchedule
+            {
+                Receiver = "Timers_EnsureSchedule_Should_StartAndUpdateCombinedTimers",
+                ActionSchedules = new []
+                {
+                    new ActionSchedule
+                    {
+                        ActionId = q1Name,
+                        Interval = TimeSpan.FromSeconds(10)
+                    },
+                    new ActionSchedule
+                    {
+                        ActionId = q2Name,
+                        EveryDayAt = new []
+                        {
+                            DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(2)),
+                        }
+                    }
+                }
+            });
+            
+            token = new CancellationTokenSource(TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(1))).Token;
+            while (!token.IsCancellationRequested)
+            {
+                await Task.Delay(100);
+            }
+            
+            Assert.AreEqual(0, q3Count);
+            Assert.AreEqual(1, q2Count);
+            Assert.AreEqual(12, q1Count);
         }
     }
 }
