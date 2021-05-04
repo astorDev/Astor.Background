@@ -39,14 +39,14 @@ namespace Astor.Background.Management.Service.Timers
             {
                 this.Logger.LogDebug($"updating interval for actionId {intervalAction.ActionId} from {existing.Interval} to {intervalAction.Interval}");
                 
-                this.IntervalActions.Remove(intervalAction.ActionId);
+                this.IntervalActions.EnsureRemoved(intervalAction.ActionId);
                 this.IntervalActions.Add(intervalAction, action);
             }
         }
 
         public void Ensure(TimesAction timesAction, Action<string> action)
         {
-            this.IntervalActions.Remove(timesAction.ActionId);
+            this.IntervalActions.EnsureRemoved(timesAction.ActionId);
             
             var existing = this.TimeActionsCollection.Get(timesAction.ActionId);
             if (!existing.Any())
@@ -87,7 +87,7 @@ namespace Astor.Background.Management.Service.Timers
             var superfluous = intervalActionIds.Where(id => !actionIds.Contains(id));
             foreach (var superfluousIntervalActionId in superfluous)
             {
-                this.IntervalActions.Remove(superfluousIntervalActionId);
+                this.IntervalActions.EnsureRemoved(superfluousIntervalActionId);
             }
 
             var timeActionIds = this.TimeActionsCollection.GetAllActionIds();

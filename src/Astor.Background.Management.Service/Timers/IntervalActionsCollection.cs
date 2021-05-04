@@ -36,9 +36,14 @@ namespace Astor.Background.Management.Service.Timers
                 });
         }
 
-        public void Remove(string actionId)
+        public void EnsureRemoved(string actionId)
         {
             var existing = this.Search(actionId);
+            if (existing == null)
+            {
+                return;
+            }
+            
             this.innerCollection.Remove(existing);
             this.Logger.LogDebug($"removing job with name {actionId}");
             JobManager.RemoveJob(actionId);
