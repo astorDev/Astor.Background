@@ -32,7 +32,9 @@ namespace Astor.Background.Management.Service.Timers
 
         public void Add(string actionId, TimeSpan timeOfDay, Action<string> action)
         {
-            var number = this.Get(actionId).Max(a => a.Number) + 1;
+            var timesWithActionId = this.Get(actionId);
+            
+            var number = timesWithActionId.Any() ? timesWithActionId.Max(a => a.Number) + 1 : 0;
             this.add(new TimeAction
             {
                 ActionId = actionId,
@@ -46,9 +48,9 @@ namespace Astor.Background.Management.Service.Timers
             return this.innerCollection.Where(e => e.ActionId == actionId).ToArray();
         }
 
-        public IEnumerable<string> GetAllActionIds()
+        public string[] GetAllActionIds()
         {
-            return this.innerCollection.Select(c => c.ActionId).Distinct();
+            return this.innerCollection.Select(c => c.ActionId).Distinct().ToArray();
         }
 
         public void RemoveByActionId(string actionId)

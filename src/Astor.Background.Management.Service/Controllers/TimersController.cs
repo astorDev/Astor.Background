@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Astor.Background.Core;
 using Astor.Background.Core.Abstractions;
 using Astor.Background.Management.Protocol;
 using Astor.Background.Management.Service.Timers;
-using Astor.RabbitMq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using RabbitMQ.Client;
-using Telegram.Bot.Types.InlineQueryResults.Abstractions;
+using ActionSchedule = Astor.Background.Management.Service.Timers.ActionSchedule;
 
 namespace Astor.Background.Management.Service.Controllers
 {
@@ -59,6 +56,24 @@ namespace Astor.Background.Management.Service.Controllers
             }
             
             this.Timers.EnsureOnly(schedule.Select(s => s.ActionId.ToString()));
+        }
+
+        [RabbitMq.Abstractions.SubscribedOn(ExchangeNames.Schedule, DeclareExchange = true)]
+        public async Task EnsureScheduleAsync(ReceiverSchedule receiverSchedule)
+        {
+            await this.Store.RemoveByReceiverAsync(receiverSchedule.Receiver);
+            foreach (var actionSchedule in receiverSchedule.ActionSchedules)
+            {
+                await this.Store.AddOrUpdateAsync(new ActionSchedule
+                {
+                    Receiver = receiverSchedule.Receiver,
+                    ActionId = actionSchedule.ActionId,
+                    Interval = actionSchedule.Interval,
+                    EveryDayAt = actionSchedule.EveryDayAt
+                });
+            }
+
+            await this.RefreshAsync();
         }
 
         private void TriggerAction(string actionId)

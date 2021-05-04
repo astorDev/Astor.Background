@@ -36,9 +36,14 @@ namespace Astor.Background.Management.Service.Timers
                 });
         }
 
-        public void Remove(string actionId)
+        public void EnsureRemoved(string actionId)
         {
             var existing = this.Search(actionId);
+            if (existing == null)
+            {
+                return;
+            }
+            
             this.innerCollection.Remove(existing);
             this.Logger.LogDebug($"removing job with name {actionId}");
             JobManager.RemoveJob(actionId);
@@ -49,9 +54,9 @@ namespace Astor.Background.Management.Service.Timers
             return this.innerCollection.SingleOrDefault(a => a.ActionId == actionId);
         }
 
-        public IEnumerable<string> GetAllActionIds()
+        public string[] GetAllActionIds()
         {
-            return this.innerCollection.Select(e => e.ActionId);
+            return this.innerCollection.Select(e => e.ActionId).ToArray();
         }
         
         public bool Any(string actionId)
