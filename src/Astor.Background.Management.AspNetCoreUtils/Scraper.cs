@@ -31,7 +31,7 @@ namespace Astor.Background.Management.Scraper
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         });
         
-        public static readonly SchemaGeneratorOptions SchemaGeneratorOptions =  new SchemaGeneratorOptions
+        public static readonly SchemaGeneratorOptions SchemaGeneratorOptions =  new()
         {
             SchemaIdSelector = t => t.GetOpenApiId()
         };
@@ -48,11 +48,11 @@ namespace Astor.Background.Management.Scraper
             }
 
             var handlers = new Dictionary<string, HandlerDescription>();
-            foreach (var subscription in service.Subscriptions)
+            foreach (var (actionId, action) in service.Actions)
             {
-                handlers.TryAdd(subscription.Action.Id, new HandlerDescription
+                handlers.TryAdd(actionId, new HandlerDescription
                 {
-                    Input = GetReferenceSchema(subscription.Action.InputType)
+                    Input = GetReferenceSchema(action.InputType)
                 });
             }
             
@@ -66,6 +66,11 @@ namespace Astor.Background.Management.Scraper
 
         public static OpenApiSchema GetReferenceSchema(Type type)
         {
+            if (type == null)
+            {
+                return null;
+            }
+            
             if (type.GetMethod("GetEnumerator") != null) 
             {
                 var arrayType = type.GenericTypeArguments.Single();

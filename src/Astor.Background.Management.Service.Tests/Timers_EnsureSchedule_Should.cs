@@ -12,6 +12,7 @@ using RabbitMQ.Client;
 namespace Astor.Background.Management.Service.Tests
 {
     [TestClass]
+    [Ignore("almost all are long running")]
     public class Timers_EnsureSchedule_Should : Test
     {
         [TestMethod]

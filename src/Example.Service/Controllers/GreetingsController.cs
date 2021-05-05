@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Astor.Background.Core.Abstractions;
@@ -39,6 +40,19 @@ namespace Example.Service.Controllers
         public string SayHelloAlternative(Example.Service.Models.Alternative.GreetingCandidate candidate)
         {
             return $"Hi, let me call you '{candidate.Nickname}'";
+        }
+
+        [RunsEvery("0:00:10")]
+        public string RemindAboutYourself()
+        {
+            return "Hey there I'm ready to say hello";
+        }
+
+        [RunsEveryDayAt("07:00")]
+        [RunsEveryDayAt("08:00")]
+        public string WakeUp()
+        {
+            return "Good morning, it's time to wake up";
         }
     }
 }
