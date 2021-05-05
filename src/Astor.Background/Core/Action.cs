@@ -6,7 +6,7 @@ namespace Astor.Background.Core
 {
     public class Action
     {
-        public string Id { get; }
+        public ActionId Id { get; }
         public MethodInfo Method { get; }
         public Type Type { get; }
         public Type? InputType { get; }
@@ -15,7 +15,8 @@ namespace Astor.Background.Core
         {
             this.Method = method;
             this.Type = method.DeclaringType;
-            this.Id = $"{method.DeclaringType!.Name.Replace("Controller", "")}_{this.Method.Name.Replace("Async", "")}";
+            this.Id = new ActionId(method.DeclaringType!.Name.Replace("Controller", ""),
+                this.Method.Name.Replace("Async", ""));
             this.InputType = method.GetParameters().SingleOrDefault()?.ParameterType;
         }
     }

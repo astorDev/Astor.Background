@@ -1,6 +1,7 @@
 using System;
 using Astor.Background.Core;
 using Astor.Background.Core.Abstractions;
+using Astor.RabbitMq;
 using GreenPipes;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
@@ -66,7 +67,6 @@ but one of subscription for action {coreSubscription.Action.Id} is of type {core
 ");
         }
 
-
         public void Register(IModel channel, IServiceProvider serviceProvider)
         {
             if (this.DeclareExchange)
@@ -79,19 +79,8 @@ but one of subscription for action {coreSubscription.Action.Id} is of type {core
                 channel.QueueDeclare(this.Action.Id, true, false, false);
                 channel.QueueBind(this.Action.Id, this.ExchangeName, routingKey: "");
             }
-                    
-            var consumer = new EventingBasicConsumer(channel);
 
-            consumer.Received += async (sender, eventArgs) =>
-            {
-                var context = new EventContext(this.Action, InputHelper.Parse(eventArgs));
-
-                using var scope = serviceProvider.CreateScope();
-                var pipe = scope.ServiceProvider.GetRequiredService<IPipe<EventContext>>();
-                await pipe.Send(context);
-            };
-
-            channel.BasicConsume(this.Action.Id, false, consumer);
+            this.Action.ConsumeQueue(channel, serviceProvider);
         }
     }
 }

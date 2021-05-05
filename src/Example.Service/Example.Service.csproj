@@ -47,6 +47,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Astor.Background\Astor.Background.csproj" />
+      <ProjectReference Include="..\Astor.Tests\Astor.Tests.csproj" />
     </ItemGroup>
 
 </Project>

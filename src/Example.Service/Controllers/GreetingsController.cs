@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Astor.Background.Core.Abstractions;
+using Astor.Background.Tests;
 using Example.Service.Domain;
 using Example.Service.Models;
 using Microsoft.Extensions.Options;
@@ -10,33 +11,37 @@ namespace Example.Service.Controllers
 {
     public class GreetingsController
     {
+        public TextStore TextStore { get; }
         public GreetingPhrases Phrases { get; }
         
-        public GreetingsController(IOptions<GreetingPhrases> phrases)
+        public GreetingsController(IOptions<GreetingPhrases> phrases, TextStore textStore)
         {
+            this.TextStore = textStore;
             this.Phrases = phrases.Value;
         }
         
-        [SubscribedOn("newcomer-appeared")]
+        [Astor.Background.RabbitMq.Abstractions.SubscribedOn("newcomer-appeared", DeclareExchange = true)]
         public async Task<string> SayHelloAsync(GreetingCandidate candidate)
         {
-            return $"{this.Phrases.Beginning}, {candidate.Name} from {candidate.City.Title}";
+            this.TextStore.TextOne = $"{this.Phrases.Beginning}, {candidate.Name} from {candidate.City.Title}";
+
+            return this.TextStore.TextOne;
         }
 
-        [SubscribedOn("new-group-appeared")]
+        [Astor.Background.RabbitMq.Abstractions.SubscribedOn("new-group-appeared", DeclareExchange = true)]
         public string SayHelloToGroup(IEnumerable<GreetingCandidate> candidates)
         {
             return "Hello guys";
         }
 
-        [SubscribedOn("somebody-entered-the-room")]
-        [SubscribedOn("bump-into-somebody-at-the-street")]
+        [Astor.Background.RabbitMq.Abstractions.SubscribedOn("somebody-entered-the-room", DeclareExchange = true)]
+        [Astor.Background.RabbitMq.Abstractions.SubscribedOn("bump-into-somebody-at-the-street", DeclareExchange = true)]
         public string SayHelloCauseOfMultipleReasons(GreetingCandidate candidate)
         {
             return "Oh, huy";
         }
 
-        [SubscribedOn("nicknamed-appeared")]
+        [Astor.Background.RabbitMq.Abstractions.SubscribedOn("nicknamed-appeared", DeclareExchange = true)]
         public string SayHelloAlternative(Example.Service.Models.Alternative.GreetingCandidate candidate)
         {
             return $"Hi, let me call you '{candidate.Nickname}'";
@@ -45,7 +50,9 @@ namespace Example.Service.Controllers
         [RunsEvery("0:00:10")]
         public string RemindAboutYourself()
         {
-            return "Hey there I'm ready to say hello";
+            this.TextStore.TextOne = "Hey there I'm ready to say hello";
+            
+            return this.TextStore.TextOne;
         }
 
         [RunsEveryDayAt("07:00")]

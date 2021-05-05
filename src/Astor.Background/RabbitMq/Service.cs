@@ -1,4 +1,5 @@
 using System.Linq;
+using Astor.Background.Core;
 
 namespace Astor.Background.RabbitMq
 {
@@ -6,9 +7,11 @@ namespace Astor.Background.RabbitMq
     {
         public Subscription[] Subscriptions { get; init; }
         
-        public string[] InternalEventsForPublishing { get; init; }
+        public TimersBasedActions TimersBasedActions { get; init; }
         
-        public string InternalExchangesPrefix { get; set; }
+        public string[] InternalEventsForPublishing { get; init; }
+
+        public string InternalExchangesPrefix { get; init; }
 
         private Service()
         {
@@ -28,7 +31,8 @@ namespace Astor.Background.RabbitMq
             {
                 Subscriptions = subscriptions,
                 InternalEventsForPublishing = subscriptions.Select(s => s.InternalExchangeName).Distinct().ToArray(),
-                InternalExchangesPrefix = internalExchangesPrefix
+                InternalExchangesPrefix = internalExchangesPrefix,
+                TimersBasedActions = coreService.TimersBasedActions
             };
         }
     }

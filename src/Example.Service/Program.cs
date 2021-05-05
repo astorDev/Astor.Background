@@ -6,6 +6,7 @@ using Astor.GreenPipes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using BackgroundService = Astor.Background.RabbitMq.BackgroundService;
 
 namespace Example.Service
@@ -36,7 +37,9 @@ namespace Example.Service
                     var pipeBuilder = new PipeBuilder<EventContext>(services);
                     startup.ConfigurePipe(pipeBuilder);
                     pipeBuilder.RegisterPipe();
-                });
+                })
+                .ConfigureLogging(loggingBuilder => 
+                    loggingBuilder.AddConsole());
 
             var host = builder.UseConsoleLifetime().Build();
 

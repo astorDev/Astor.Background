@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Astor.Background.Core;
+using Astor.Background.RabbitMq;
 using Astor.RabbitMq;
 using Example.Service.Controllers;
+using Example.Service.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Action = Astor.Background.Core.Action;
+using Service = Astor.Background.Core.Service;
 
 namespace Astor.Background.Tests
 {
@@ -30,6 +34,12 @@ namespace Astor.Background.Tests
 
             channel.QueueDelete(this.Queue);
             channel.ExchangeDelete(this.Exchange);
+        }
+
+        public ILogger<T> GetLogger<T>()
+        {
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+            return loggerFactory.CreateLogger<T>();
         }
         
         public void SetupRabbit(Action<EventingBasicConsumer> consumption)
@@ -59,7 +69,12 @@ namespace Astor.Background.Tests
             
             var serviceCollection = base.CreateBaseServiceCollection();
             serviceCollection.AddRabbit(configuration.GetSection("Rabbit"));
-
+            serviceCollection.AddSingleton(Options.Create(
+                new GreetingPhrases
+                {
+                    Beginning = "AutoTestsHi"
+                }));
+            
             return serviceCollection;
         }
 
