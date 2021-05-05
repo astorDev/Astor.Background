@@ -10,8 +10,7 @@ namespace Astor.Background.Core
     public class Service
     {
         public Subscription[] Subscriptions { get; }
-        public IntervalAction[] IntervalActions { get; }
-        public SpecificTimesAction[] SpecificTimesActions { get; }
+        public TimersBasedActions TimersBasedActions { get; }
 
         private Dictionary<string, Action> actions;
         public Dictionary<string, Action> Actions => this.actions ??= this.readActions();
@@ -19,13 +18,10 @@ namespace Astor.Background.Core
 
         public IEnumerable<Type> InputTypes => this.Actions.Values.Select(a => a.InputType).Where(i => i != null).ToArray();
         
-        public Service(Subscription[] subscriptions, 
-            IntervalAction[] intervalActions, 
-            SpecificTimesAction[] specificTimesActions)
+        public Service(Subscription[] subscriptions, TimersBasedActions timersBasedActions)
         {
             this.Subscriptions = subscriptions;
-            this.IntervalActions = intervalActions;
-            this.SpecificTimesActions = specificTimesActions;
+            this.TimersBasedActions = timersBasedActions;
         }
 
         public static Service Parse(Assembly assembly)
@@ -44,16 +40,9 @@ namespace Astor.Background.Core
                 from a in m.GetCustomAttributes(typeof(SubscribedOnAttribute))
                 select new Subscription((SubscribedOnAttribute) a, new Action(m));
 
-            var intervalActions = from m in methods
-                from a in m.GetCustomAttributes(typeof(RunsEveryAttribute))
-                select new IntervalAction((RunsEveryAttribute) a, new Action(m));
+            var timeActions = TimersBasedActions.Parse(methods);
 
-            var timeActions = from m in methods
-                from a in m.GetCustomAttributes(typeof(RunsEveryDayAtAttribute))
-                group new {a, m} by m into ng 
-                select new SpecificTimesAction(new Action(ng.Key), ng.Select(x => (RunsEveryDayAtAttribute)x.a).ToArray());
-
-            return new Service(subscriptions.ToArray(), intervalActions.ToArray(), timeActions.ToArray());
+            return new Service(subscriptions.ToArray(), timeActions);
         }
 
         private Dictionary<string, Action> readActions()
@@ -61,8 +50,7 @@ namespace Astor.Background.Core
             var result = new Dictionary<string, Action>();
             
             var actionsRaw = this.Subscriptions.Select(s => s.Action)
-                .Union(this.IntervalActions.Select(s => s.Action))
-                .Union(this.SpecificTimesActions.Select(ta => ta.Action));
+                .Union(this.TimersBasedActions.Actions);
             
             foreach (var a in actionsRaw)
             {

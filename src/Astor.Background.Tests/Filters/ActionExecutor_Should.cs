@@ -45,7 +45,7 @@ namespace Astor.Background.Tests.Filters
                 context
             );
             
-            Assert.AreEqual("Guten tag, George from London", context.ActionResult.Output);
+            Assert.AreEqual("AutoTestsHi, George from London", context.ActionResult.Output);
             Console.WriteLine(JsonConvert.SerializeObject(context.Input));
             Console.WriteLine(JsonConvert.SerializeObject(context.ActionResult));
         }
