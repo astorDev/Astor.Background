@@ -26,7 +26,7 @@ namespace Astor.Background.RabbitMq.Filters
                 AttemptIndex = 0,
                 EndTime = context.HandlingParams.EndTime,
                 StartTime = context.HandlingParams.StartTime,
-                Event = context.Input.BodyObject,
+                Event = context.Input.BodyObject ?? context.Input.BodyString,
                 Exception = context.ActionResult.Exception == null
                     ? null
                     : new Exception
