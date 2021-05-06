@@ -2,7 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
+
         <IsPackable>false</IsPackable>
+
         <RootNamespace>Astor.Background.Management.Scraper.Tests</RootNamespace>
     </PropertyGroup>
 
@@ -14,9 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Astor.Background.Management.AspNetCoreUtils\Astor.Background.Management.AspNetCoreUtils.csproj" />
-        <ProjectReference Include="..\Astor.Background\Astor.Background.csproj" />
-        <ProjectReference Include="..\Example.Service\Example.Service.csproj" />
+       <ProjectReference Include="..\Astor.Background.Management.AspNetCoreUtils\Astor.Background.Management.AspNetCoreUtils.csproj" />
+       <ProjectReference Include="..\Astor.Background\Astor.Background.csproj" />
+       <ProjectReference Include="..\Example.Service\Example.Service.csproj" />
     </ItemGroup>
 
 </Project>
