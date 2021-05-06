@@ -1,34 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Service", "src\Example.Service\Example.Service.csproj", "{74063DD5-9C07-4A13-902F-8D7F82A98D74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Service", "Example.Service\Example.Service.csproj", "{74063DD5-9C07-4A13-902F-8D7F82A98D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Tests", "src\Astor.Background.Management.Tests\Astor.Background.Management.Tests.csproj", "{B13B94A7-A5F7-4CD9-9222-6AECFE3FA19E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Tests", "Astor.Background.Management.Tests\Astor.Background.Management.Tests.csproj", "{B13B94A7-A5F7-4CD9-9222-6AECFE3FA19E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background", "src\Astor.Background\Astor.Background.csproj", "{27EBF590-0470-4C27-98E4-F6B62C10DF3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background", "Astor.Background\Astor.Background.csproj", "{27EBF590-0470-4C27-98E4-F6B62C10DF3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.DebugWebApi", "src\Example.DebugWebApi\Example.DebugWebApi.csproj", "{F74B07BA-7A0F-4541-AFB9-656028FED485}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.DebugWebApi", "Example.DebugWebApi\Example.DebugWebApi.csproj", "{F74B07BA-7A0F-4541-AFB9-656028FED485}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Tests", "src\Astor.Background.Tests\Astor.Background.Tests.csproj", "{47E2C81B-B6DC-4DAC-AD55-672D3AAED49A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Tests", "Astor.Background.Tests\Astor.Background.Tests.csproj", "{47E2C81B-B6DC-4DAC-AD55-672D3AAED49A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.GreenPipes", "src\Astor.GreenPipes\Astor.GreenPipes.csproj", "{7D0452B6-E3B9-43DE-8E44-B57D6C5D8149}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.GreenPipes", "Astor.GreenPipes\Astor.GreenPipes.csproj", "{7D0452B6-E3B9-43DE-8E44-B57D6C5D8149}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.GreenPipes.Tests", "src\Astor.GreenPipes.Tests\Astor.GreenPipes.Tests.csproj", "{40132804-BB23-4883-8A3B-DC63867E4E9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.GreenPipes.Tests", "Astor.GreenPipes.Tests\Astor.GreenPipes.Tests.csproj", "{40132804-BB23-4883-8A3B-DC63867E4E9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Tests", "src\Astor.Tests\Astor.Tests.csproj", "{F7E69907-E39C-4C09-AD5B-60C6EC41896A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Tests", "Astor.Tests\Astor.Tests.csproj", "{F7E69907-E39C-4C09-AD5B-60C6EC41896A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.RabbitMq", "src\Astor.RabbitMq\Astor.RabbitMq.csproj", "{6E12E5E9-18B4-4BD9-A0D5-3B23C3FE9555}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.RabbitMq", "Astor.RabbitMq\Astor.RabbitMq.csproj", "{6E12E5E9-18B4-4BD9-A0D5-3B23C3FE9555}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reflection", "src\Astor.Reflection\Astor.Reflection.csproj", "{498E0C45-A613-4698-B537-3AED7FE1C625}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reflection", "Astor.Reflection\Astor.Reflection.csproj", "{498E0C45-A613-4698-B537-3AED7FE1C625}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service", "src\Astor.Background.Management.Service\Astor.Background.Management.Service.csproj", "{B4207249-21F1-48BD-BDA0-FB263807909A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service", "Astor.Background.Management.Service\Astor.Background.Management.Service.csproj", "{B4207249-21F1-48BD-BDA0-FB263807909A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service.Tests", "src\Astor.Background.Management.Service.Tests\Astor.Background.Management.Service.Tests.csproj", "{7FD74725-D11E-4117-988C-782EDDECFC2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.Service.Tests", "Astor.Background.Management.Service.Tests\Astor.Background.Management.Service.Tests.csproj", "{7FD74725-D11E-4117-988C-782EDDECFC2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.AspNetCoreUtils", "src\Astor.Background.Management.AspNetCoreUtils\Astor.Background.Management.AspNetCoreUtils.csproj", "{0250ABA1-F506-4F60-8A6F-8050AC05EF64}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.AspNetCoreUtils", "Astor.Background.Management.AspNetCoreUtils\Astor.Background.Management.AspNetCoreUtils.csproj", "{0250ABA1-F506-4F60-8A6F-8050AC05EF64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.RabbitMq.Tests", "src\Astor.RabbitMq.Tests\Astor.RabbitMq.Tests.csproj", "{7320FD1A-E1A2-416B-9AAF-589AF8C40EF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.RabbitMq.Tests", "Astor.RabbitMq.Tests\Astor.RabbitMq.Tests.csproj", "{7320FD1A-E1A2-416B-9AAF-589AF8C40EF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.AspNetCoreUtils.Tests", "src\Astor.Background.Management.AspNetCoreUtils.Tests\Astor.Background.Management.AspNetCoreUtils.Tests.csproj", "{C9DED48A-9E3C-4380-A9F1-4FBDFD6D1D68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.AspNetCoreUtils.Tests", "Astor.Background.Management.AspNetCoreUtils.Tests\Astor.Background.Management.AspNetCoreUtils.Tests.csproj", "{C9DED48A-9E3C-4380-A9F1-4FBDFD6D1D68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
