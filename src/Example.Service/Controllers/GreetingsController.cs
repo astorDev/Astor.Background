@@ -47,7 +47,7 @@ namespace Example.Service.Controllers
             return $"Hi, let me call you '{candidate.Nickname}'";
         }
 
-        [RunsEvery("0:00:10")]
+        [RunsEvery("0:00:30")]
         public string RemindAboutYourself()
         {
             this.TextStore.TextOne = "Hey there I'm ready to say hello";

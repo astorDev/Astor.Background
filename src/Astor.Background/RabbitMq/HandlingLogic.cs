@@ -15,7 +15,10 @@ namespace Astor.Background.RabbitMq
     {
         public static void ConsumeQueue(this Action action, IModel rabbitChanel, IServiceProvider serviceProvider)
         {
-            rabbitChanel.ConsumeQueue(action.Id, eventHandler(action, serviceProvider));
+            rabbitChanel.ConsumeQueue(action.Id, eventHandler(action, serviceProvider), new ConsumptionSettings
+            {
+                AutoAck = false
+            });
         }
 
         public static void DeclareAndConsumeQueue(this Action action, IModel rabbitChannel,

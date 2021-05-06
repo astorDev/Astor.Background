@@ -38,6 +38,11 @@ namespace Astor.Background.RabbitMq
         
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            this.Channel.ModelShutdown += (sender, args) =>
+            {
+                Environment.FailFast(args.ToString());
+            };
+            
             try
             {
                 this.registerSubscriptions();
