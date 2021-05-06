@@ -28,8 +28,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.RabbitMq.Tests", "Astor.RabbitMq.Tests\Astor.RabbitMq.Tests.csproj", "{7320FD1A-E1A2-416B-9AAF-589AF8C40EF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.Management.AspNetCoreUtils.Tests", "Astor.Background.Management.AspNetCoreUtils.Tests\Astor.Background.Management.AspNetCoreUtils.Tests.csproj", "{C9DED48A-9E3C-4380-A9F1-4FBDFD6D1D68}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,9 +90,5 @@ Global
 		{7320FD1A-E1A2-416B-9AAF-589AF8C40EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7320FD1A-E1A2-416B-9AAF-589AF8C40EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7320FD1A-E1A2-416B-9AAF-589AF8C40EF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9DED48A-9E3C-4380-A9F1-4FBDFD6D1D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9DED48A-9E3C-4380-A9F1-4FBDFD6D1D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9DED48A-9E3C-4380-A9F1-4FBDFD6D1D68}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9DED48A-9E3C-4380-A9F1-4FBDFD6D1D68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
