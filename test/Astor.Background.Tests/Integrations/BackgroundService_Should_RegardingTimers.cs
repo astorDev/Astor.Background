@@ -61,7 +61,7 @@ namespace Astor.Background.Tests.Integrations
             var remindAboutYourselfActionSchedule = single(schedule, "Greetings_RemindAboutYourself");
             var wakeupSchedule = single(schedule, "Greetings_WakeUp");
             
-            Assert.AreEqual(TimeSpan.FromSeconds(10), remindAboutYourselfActionSchedule.Interval);
+            Assert.AreEqual(TimeSpan.FromSeconds(30), remindAboutYourselfActionSchedule.Interval);
             Assert.AreEqual(2, wakeupSchedule.EveryDayAt.Length);
             assertAnyTime(wakeupSchedule, TimeSpan.FromHours(7));
             assertAnyTime(wakeupSchedule, TimeSpan.FromHours(8));
