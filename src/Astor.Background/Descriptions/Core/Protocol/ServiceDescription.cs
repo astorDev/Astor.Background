@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Linq;
 
-namespace Astor.Background.Management.Protocol
+namespace Astor.Background.Descriptions.Core.Protocol
 {
     public sealed record ServiceDescription
     {
@@ -15,6 +15,13 @@ namespace Astor.Background.Management.Protocol
 
     public sealed record HandlerDescription
     {
-        public OpenApiSchema Input { get; set; }
+        public InputDescription Input { get; set; }
+    }
+
+    public class InputDescription
+    {
+        public bool IsArray { get; set; }
+        
+        public string ReferenceId { get; set; }
     }
 }
