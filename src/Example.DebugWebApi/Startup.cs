@@ -1,8 +1,8 @@
-using Astor.Background;
 using Astor.Background.Core;
 using Astor.Background.Core.Filters;
-using Astor.Background.Management;
-using Astor.Background.Management.Scraper;
+using Astor.Background.Descriptions;
+using Astor.Background.Descriptions.Core.Protocol;
+using Astor.Background.Descriptions.OpenApiDocuments;
 using Astor.GreenPipes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -41,15 +41,20 @@ namespace Example.DebugWebApi
                 pipe.UseJsonBodyDeserializer()
                     .UseActionExecutor()
                 );
-            
+
             services.AddSingleton(sp =>
             {
                 var service = sp.GetRequiredService<Astor.Background.Core.Service>();
-                var description = service.GetDescription(new OpenApiInfo
+                return ServiceDescriptionBuilder.Generate(service, new OpenApiInfo
                 {
                     Title = "Example.DebugWebApi",
                     Version = "1.0"
                 });
+            });
+            
+            services.AddSingleton(sp =>
+            {
+                var description = sp.GetRequiredService<ServiceDescription>();
 
                 return description.ToOpenApiDocument();
             });

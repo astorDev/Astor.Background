@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Example.Service.Models
 {
@@ -6,7 +7,11 @@ namespace Example.Service.Models
     {
         public string Name { get; set; }
         
+        public string[] Tags { get; set; }
+        
         public City City { get; set; }
+
+        public Friend[] Friends { get; set; }
     }
 
     public class City
@@ -16,5 +21,10 @@ namespace Example.Service.Models
         public int Timezone { get; set; }
         
         public DateTime CurrentTime { get; set; }
+    }
+
+    public class Friend
+    {
+        public string Name { get; set; }
     }
 }
