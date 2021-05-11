@@ -1,0 +1,15 @@
+﻿{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Astor",
+  "classifications": [ "BackgroundService" ],
+  "name": "Astor Background Service",
+  "identity": "Astor.Template",
+  "groupIdentity":"Astor.Template",
+  "shortName": "bg",
+  "tags": {
+    "language": "C#",
+    "type":"project"
+  },
+  "sourceName": "Template",
+  "preferNameDirectory": true
+}
