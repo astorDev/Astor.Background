@@ -10,6 +10,8 @@ namespace Example.Service.Models
         public string[] Tags { get; set; }
         
         public City City { get; set; }
+        
+        public DayPeriod DayPeriod { get; set; }
 
         public Friend[] Friends { get; set; }
     }
@@ -26,5 +28,13 @@ namespace Example.Service.Models
     public class Friend
     {
         public string Name { get; set; }
+    }
+
+    public enum DayPeriod
+    {
+        Morning,
+        Afternoon,
+        Evening,
+        Night
     }
 }
