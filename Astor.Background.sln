@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Background.Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Background.DebugWebApi", "templates\Template.Background.DebugWebApi\Template.Background.DebugWebApi.csproj", "{32C01FEA-9FF1-4DB9-A20D-2BB432CAB3F3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ElasticLogs", "ElasticLogs", "{92E2B228-7094-4A8A-86CD-5591038B0FC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Background.ElasticLogs.Tests", "ElasticLogs\Astor.Background.ElasticLogs.Tests\Astor.Background.ElasticLogs.Tests.csproj", "{F3C4381E-BEC6-4D79-8B84-9621B96EED4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +100,10 @@ Global
 		{32C01FEA-9FF1-4DB9-A20D-2BB432CAB3F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32C01FEA-9FF1-4DB9-A20D-2BB432CAB3F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32C01FEA-9FF1-4DB9-A20D-2BB432CAB3F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3C4381E-BEC6-4D79-8B84-9621B96EED4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3C4381E-BEC6-4D79-8B84-9621B96EED4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3C4381E-BEC6-4D79-8B84-9621B96EED4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3C4381E-BEC6-4D79-8B84-9621B96EED4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{40132804-BB23-4883-8A3B-DC63867E4E9A} = {EA690B59-874D-46AE-A984-291D3DC1F9BD}
@@ -112,5 +120,6 @@ Global
 		{498E0C45-A613-4698-B537-3AED7FE1C625} = {77512434-B6D5-41F6-A763-C9E0839A4845}
 		{61D6D929-8335-445C-9BA2-5C3BD0CE3D16} = {084B2767-5EE8-43A9-8322-EC85C8EF6FBF}
 		{32C01FEA-9FF1-4DB9-A20D-2BB432CAB3F3} = {084B2767-5EE8-43A9-8322-EC85C8EF6FBF}
+		{F3C4381E-BEC6-4D79-8B84-9621B96EED4E} = {92E2B228-7094-4A8A-86CD-5591038B0FC6}
 	EndGlobalSection
 EndGlobal
