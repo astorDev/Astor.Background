@@ -48,26 +48,58 @@ namespace Astor.Background.Descriptions
         {
             foreach (var schemaProperty in schema.Properties)
             {
-                if (schemaProperty.Value.OneOf.Any())
-                {
-                    var propertyType = GetProperty(type, schemaProperty)!.PropertyType;
-
-                    SetPropertyToRef(propertyType, schemaJObject, schemaProperty);
-                    this.EnsureTypeAndSubtypesAdded(propertyType);
-
-                    continue;
-                }
-
-                if (schemaProperty.Value.Item?.Reference != null)
-                {
-                    var typeProperty = GetProperty(type, schemaProperty);
-                    var enumerableTypeArg = typeProperty!.PropertyType.GetEnumerableItemType();
-                    this.EnsureTypeAndSubtypesAdded(enumerableTypeArg!);
-
-                    SetArrayRefToComponent(schemaJObject, schemaProperty, enumerableTypeArg);
-                }
+                if (this.tryAddDirectlyReferencedObject(type, schemaJObject, schemaProperty)) continue;
+                if (this.tryAdObjectReferencedAsEnumerable(type, schemaJObject, schemaProperty)) continue;
+                if (this.tryAddEnums(type, schemaJObject, schemaProperty)) continue;
             }
         }
+
+        private bool tryAdObjectReferencedAsEnumerable(Type type, JObject schemaJObject, KeyValuePair<string, JsonSchemaProperty> schemaProperty)
+        {
+            if (schemaProperty.Value.Item?.Reference != null)
+            {
+                var typeProperty = GetProperty(type, schemaProperty);
+                var enumerableTypeArg = typeProperty!.PropertyType.GetEnumerableItemType();
+                this.EnsureTypeAndSubtypesAdded(enumerableTypeArg!);
+
+                SetArrayRefToComponent(schemaJObject, schemaProperty, enumerableTypeArg);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool tryAddDirectlyReferencedObject(Type type, JObject schemaJObject, KeyValuePair<string, JsonSchemaProperty> schemaProperty)
+        {
+            if (schemaProperty.Value.OneOf.Any())
+            {
+                var propertyType = GetProperty(type, schemaProperty)!.PropertyType;
+
+                SetPropertyToRef(propertyType, schemaJObject, schemaProperty);
+                this.EnsureTypeAndSubtypesAdded(propertyType);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool tryAddEnums(Type type, JObject schemaJObject, KeyValuePair<string, JsonSchemaProperty> schemaProperty)
+        {
+            if (schemaProperty.Value.Reference != null)
+            {
+                var propertyType = GetProperty(type, schemaProperty)!.PropertyType;
+                
+                SetPropertyToRef(propertyType, schemaJObject, schemaProperty);
+                this.EnsureTypeAndSubtypesAdded(propertyType);
+
+                return true;
+            }
+
+            return false;
+        }
+        
 
         private static PropertyInfo GetProperty(Type type, KeyValuePair<string, JsonSchemaProperty> schemaProperty)
         {
