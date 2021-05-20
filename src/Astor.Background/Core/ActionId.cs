@@ -18,7 +18,13 @@ namespace Astor.Background.Core
             this.Id = $"{this.Receiver}_{this.Method}";
         }
         
-        public static implicit operator string(ActionId actionId) => actionId.Id; 
+        public static implicit operator string(ActionId actionId) => actionId.Id;
+
+        public static ActionId Parse(string source)
+        {
+            var parts = source.Split("_");
+            return new ActionId(parts[0], parts[1]);
+        }
 
         public override string ToString()
         {

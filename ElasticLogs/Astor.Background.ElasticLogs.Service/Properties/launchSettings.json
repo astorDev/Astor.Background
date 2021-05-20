@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Local": {
+      "commandName": "Project",
+      "commandLineArgs": "--ConnectionStrings:RabbitMq=amqp://localhost:5672 --Elastic=http://localhost:9200 --Kibana=http://localhost:5601 --InternalExchangesPrefix=elastic-logs"
+    }
+  }
+}
