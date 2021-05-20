@@ -22,7 +22,7 @@ namespace Astor.Background.ElasticLogs.Service
         public async Task SaveAsync(ActionResultCandidate candidate)
         {
             
-            var actionFamilyName = ActionId.Parse(candidate.ActionId).Receiver; // needs to be changed for ActionId.Parse when it will be created
+            var actionFamilyName = ActionId.Parse(candidate.ActionId).Receiver;
             var indexName = $"backgroundlogs-{actionFamilyName.ToLower()}";
 
             var record = new
