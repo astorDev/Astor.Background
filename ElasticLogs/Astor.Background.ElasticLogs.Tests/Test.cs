@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Astor.Background.ElasticLogs.Service;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +23,8 @@ namespace Astor.Background.ElasticLogs.Tests
             builder.AddInMemoryCollection(new[]
             {
                 new KeyValuePair<string, string>("ConnectionStrings:RabbitMq", "amqp://localhost:5672"),
-                new KeyValuePair<string, string>("Elastic", "http://localhost:9200")
+                new KeyValuePair<string, string>("Elastic", "http://localhost:9200"),
+                new KeyValuePair<string, string>("Kibana", "http://localhost:5601")
             });
         }
         

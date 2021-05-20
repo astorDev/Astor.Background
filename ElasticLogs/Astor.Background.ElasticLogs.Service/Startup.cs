@@ -4,9 +4,11 @@ using Astor.Background.Core.Filters;
 using Astor.Background.RabbitMq;
 using Astor.Background.RabbitMq.Filters;
 using Astor.GreenPipes;
+using Elasticsearch.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
+using Nest.JsonNetSerializer;
 
 namespace Astor.Background.ElasticLogs.Service
 {
@@ -21,12 +23,18 @@ namespace Astor.Background.ElasticLogs.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRabbitMqBackgroundService(this.Configuration.GetConnectionString("RabbitMq"));
+            services.AddRabbitMqBackgroundService(this.Configuration.GetConnectionString("RabbitMq"), this.Configuration["InternalExchangesPrefix"]);
             services.AddSingleton<IElasticClient>(sp =>
             {
                 var uri = new Uri(this.Configuration["Elastic"]);
-                var settings = new ConnectionSettings(uri);
+                var pool = new SingleNodeConnectionPool(uri);
+                var settings = new ConnectionSettings(pool, JsonNetSerializer.Default );
                 return new ElasticClient(settings);
+            });
+
+            services.AddHttpClient<KibanaClient>(cl =>
+            {
+                cl.BaseAddress = new Uri(this.Configuration["Kibana"]);
             });
         }
         
@@ -34,11 +42,7 @@ namespace Astor.Background.ElasticLogs.Service
         {
             builder
                 .Use<Acknowledger>()
-                .Use<LogPublisher>()
-                .Use<HandlingTimer>()
-                .Use<ActionExceptionCatcher>()
                 .Use<JsonBodyDeserializer>()
-                .Use<ActionExceptionCatcher>()
                 .Use<ActionExecutor>()
                 ;
         }

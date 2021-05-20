@@ -43,8 +43,11 @@ namespace Astor.Background.ElasticLogs.Service
                     startup.ConfigurePipe(pipeBuilder);
                     pipeBuilder.RegisterPipe();
                 })
-                .ConfigureLogging(loggingBuilder => 
-                    loggingBuilder.AddConsole());
+                .ConfigureLogging(logging => 
+                    logging.AddSimpleConsole(c =>
+                    {
+                        c.SingleLine = true;
+                    }));
         }
     }
 }

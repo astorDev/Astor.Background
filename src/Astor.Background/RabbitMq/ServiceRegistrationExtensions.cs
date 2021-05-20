@@ -7,7 +7,7 @@ namespace Astor.Background.RabbitMq
 {
     public static class ServiceRegistrationExtensions
     {
-        public static void AddRabbitMqBackgroundService(this IServiceCollection serviceCollection, string rabbitMqConnectionString)
+        public static void AddRabbitMqBackgroundService(this IServiceCollection serviceCollection, string rabbitMqConnectionString, string internalExchangePrefix = null)
         {
             var callerType = StackTraceAnalyzer.GetCallerType();
             
@@ -16,7 +16,7 @@ namespace Astor.Background.RabbitMq
             serviceCollection.AddSingleton(sp =>
             {
                 var coreService = sp.GetRequiredService<Core.Service>();
-                return Service.Create(coreService);
+                return Service.Create(coreService, internalExchangePrefix);
             });
         }
     }
