@@ -3,7 +3,7 @@
   "profiles": {
     "Localhost" : {
       "commandName": "Project",
-      "commandLineArgs" : "--ConnectionStrings:Rabbit=amqp://localhost:5672 --ConnectionStrings:Mongo=mongodb://localhost:27017 --InternalExchangesPrefix=my"
+      "commandLineArgs" : "--ConnectionStrings:Rabbit=amqp://localhost:5672 --ConnectionStrings:Mongo=mongodb://localhost:27017 --InternalExchangePrefix=my"
     }
   }
 }
