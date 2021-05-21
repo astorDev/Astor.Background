@@ -1,7 +1,7 @@
 # Astor.Background
 
 Micro-framework for creating .Net background services, with actions triggered either by events or time-based.  
-Stylistically, it's just like ASP .NET Core MVC, but for background work.
+It's just like ASP .NET Core MVC, but for background work.
 
 ## Installation
 
@@ -9,9 +9,9 @@ Stylistically, it's just like ASP .NET Core MVC, but for background work.
 The service is the basic management tool for the whole background infrastructure. What it does is:
 
 - Logs action result in an actionable way. Namely, stores them in MongoDB
-- Manages time-based actions. This includes storing schedules and triggering events based on it.
+- Manages time-based actions. This includes storing schedules and triggering events based on them.
 
-The recommended way to install is by using [docker image](https://hub.docker.com/repository/docker/vosarat/background-management-service) like this:
+The recommended way to install it is by using [docker image](https://hub.docker.com/repository/docker/vosarat/background-management-service) like this:
 
 ```yml
 version: '3.9'
@@ -30,16 +30,16 @@ services:
 
 | Parameter | Why And What? | Example |
 | ------------ | :-----------: | :----------: |
-| RABBIT_CONNECTIONSTRING | The whole framework is built on top of the RabbiMq. Here we need it to receive logs and schedules and trigger time-based events | amqp://localhost:5672 |
+| RABBIT_CONNECTIONSTRING | The whole framework is built on top of the RabbitMq. The background management service needs it to receive logs and schedules and trigger time-based events | amqp://localhost:5672 |
 | MONGO_CONNECTIONSTRING | Here it will store the results of an action | mongodb://localhost:27017 |
-| TELEGRAM_TOKEN | It needs to send you a message if something goes wrong. Since it's considered important to notify on that and we have not yet any other way the bot token is mandatory | 111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAA |
-| TELEGRAM_CHATID | As with TELEGRAM_TOKEN it needs a chat where to send you notifications if something goes wrong | -11111111111 |
-| INTERNALEXCHANGEPREFIX | The prefix is used for creating exchanges for internal service events. Since there are some actions are triggered on the service start, this parameter is mandatory | my |
-| TIMEZONESHIFT | If you are not in the UTC zone, you'll probably need to declare the schedule in your time zone. You can shift to it by using this optional parameter | -3 |
+| TELEGRAM_TOKEN | Bot will send you messages if something goes wrong. Since it's considered crucial notification and we have not yet any other notification mechanism, the bot token is mandatory | 111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAA |
+| TELEGRAM_CHATID | Bot also needs a chat for notifications | -11111111111 |
+| INTERNALEXCHANGEPREFIX | The prefix is used for creating exchanges for internal service events. Since there are actions triggered on the service start, this parameter is mandatory | my |
+| TIMEZONESHIFT | If you are not in the UTC zone, you can shift schedules to your time zone by this optional parameter | -3 |
 
 ### 2. Install the template
 
-The easiest way to create a new background service is by using dotnet new template.  
+The easiest way to create a new background service is by using a dotnet new template.  
 You can [install it from a file system directory](https://docs.microsoft.com/en-us/dotnet/core/tools/custom-templates#to-install-a-template-from-a-file-system-directory) as following:
 ```sh
 git clone https://github.com/astorDev/Astor.Background.git
@@ -76,15 +76,14 @@ public class TemplateController
 ```
 
 The first action will:
-- declare exchange `numbers.supply`. If you don't need this, just remove DeclareExchange
-- declare queue `Template_TryParse`
-- bind `Template_TryParse` with `numbers.supply`
-- consume `Template_TryParse` by running the action method with deserialized from json received from the queue
+- Declare exchange `numbers.supply`. If you don't need this, just remove DeclareExchange
+- Declare queue `Template_TryParse`
+- Bind `Template_TryParse` with `numbers.supply`
+- Consume `Template_TryParse` by running the action method with arguments deserialized from json received from the queue
 
 The second action will:
-- declare queue `Template_GetTime`
-- publishes the service schedule so that the action will be fired once in 10 seconds. If you need it to run at specific times, use `RunsEveryDayAt`.
-- consume `Template_GetTime` by running the action method
+- Declare queue `Template_GetTime`
+- Publishes the service schedule so that the action will be fired once in 10 seconds. If you need it to run at specific times, use `RunsEveryDayAt`.
+- Consume `Template_GetTime` by running the action method
 
-In addition to that, every action execution result will be published to `background-logs` exchange for further consumption by Background.Management.Service
-The remaining is up to you to implement. The Framework tries to look as close to the ASP .NET MVC as possible, so the remaining should look familiar, including dependency injection.
+In addition to that, every action execution result will be published to `background-logs` exchange for further consumption by Background.Management.Service. The remaining is up to you to implement. The framework tries to look as close to the ASP .NET MVC as possible, so the remaining should look familiar, including dependency injection.
