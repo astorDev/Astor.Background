@@ -1,6 +1,6 @@
 # Astor.Background
 
-Micro-framework for creating .net background services, with actions triggered either by events or time-based.  
+Micro-framework for creating .Net background services, with actions triggered either by events or time-based.  
 Stylistically, you create Controller, just like in ASP .NET MVC. But use specific attributes to either subscribe them to events or schedule them.
 
 ## Installation
