@@ -2,7 +2,7 @@
 on:
   push:
     branches:
-      - nugetCI
+      - main
 jobs:
   publish:
     name: build, pack & publish
