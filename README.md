@@ -5,14 +5,14 @@ Stylistically, you create Controller, just like in ASP .NET MVC. But use specifi
 
 ## Installation
 
-###1. Deploy Background.Management.Service  
+### 1. Deploy Background.Management.Service  
    which handles things that are fundamental for the framework:
 
 
 - Logs action result in an actionable way. Namely, stores them in MongoDb
 - Manages time-based actions. Receives and stores schedule for actions, which runs periodically or at specific times at a day
 
-Here is the example of docker-compose file to do that with parameters explanation:
+Here is the example of `docker-compose.yml`:
 
 ```
 version: '3.9'
@@ -34,11 +34,11 @@ services:
 | RABBIT_CONNECTIONSTRING | The whole framework is built on top of the RabbiMq. Here we need it to receive logs and schedules and trigger time-based events | amqp://localhost:5672 |
 | MONGO_CONNECTIONSTRING | Here it will store the results of an action | mongodb://localhost:27017 |
 | TELEGRAM_TOKEN | It needs to send you a message if something goes wrong. Since it's considered important to notify on that and we have not yet any other way the bot token is mandatory | 111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAA |
-| TELEGRAM_CHATID | As with TELEGRAM_TOKEN we need a chat where to send you notifications if something goes wrong | -11111111111 |
+| TELEGRAM_CHATID | As with TELEGRAM_TOKEN it needs a chat where to send you notifications if something goes wrong | -11111111111 |
 | INTERNALEXCHANGEPREFIX | The prefix is used for creating exchanges for internal service events. Since there are some actions triggered on service start this parameter is mandatory | my |
 | TIMEZONESHIFT | If you are not in UTC zone you'll probably need to declare schedule in your timezone. You can shift to it by using this optional parameter | -3 |
 
-###2. Install the template
+### 2. Install the template
 
 The easiest way to create a background service is by using dotnet new template.  
 The only supported way yet is to [install it from file system](https://docs.microsoft.com/en-us/dotnet/core/tools/custom-templates#to-install-a-template-from-a-file-system-directory), you can do it pretty easily by executing:
@@ -49,7 +49,7 @@ cd Astor.Background
 dotnet new -i templates
 ```
 
-###3. Enjoy
+### 3. Enjoy
 
 Now if you run `dotnet new bg --name MyApp` it will create the folder with too projects in it:
 - MyApp.Background.Service - the actual background service which is run
