@@ -16,5 +16,5 @@ jobs:
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: src/Astor.Background/Astor.Background.csproj
-
           VERSION_REGEX: ^\s*<PackageVersion>(.*)<\/PackageVersion>\s*$
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
