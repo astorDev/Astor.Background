@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - nugetCI
+  workflow_dispatch:
 jobs:
   publish:
     name: build, pack & publish
