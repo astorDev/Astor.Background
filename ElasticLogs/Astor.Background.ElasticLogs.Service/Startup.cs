@@ -23,7 +23,7 @@ namespace Astor.Background.ElasticLogs.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRabbitMqBackgroundService(this.Configuration.GetConnectionString("RabbitMq"), this.Configuration["InternalExchangesPrefix"]);
+            services.AddRabbitMqBackgroundService(this.Configuration.GetConnectionString("RabbitMq"), "elastic-logs");
             services.AddSingleton<IElasticClient>(sp =>
             {
                 var uri = new Uri(this.Configuration["Elastic"]);
