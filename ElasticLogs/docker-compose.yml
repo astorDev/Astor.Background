@@ -2,7 +2,7 @@
 
 services:
   elasticlogs:
-    image: vosarat/background-elasticlogs-service:0.1
+    image: vosarat/background-elasticlogs-service:1.0
     build:
       context: .
       dockerfile: Astor.Background.ElasticLogs.Service/Dockerfile
