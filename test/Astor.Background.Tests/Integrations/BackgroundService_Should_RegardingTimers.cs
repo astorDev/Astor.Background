@@ -17,93 +17,71 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using Service = Astor.Background.Core.Service;
 
 namespace Astor.Background.Tests.Integrations
 {
     [TestClass]
-    public class BackgroundService_Should_RegardingTimers : Test
+    public class BackgroundService_Should_RegardingTimers : RabbitMqBackgroundServiceTest
     {
         [TestMethod]
         public async Task PublishReceiverSchedule()
         {
-            const string queueName = "BackgroundService_Should_RegardingTimers_PublishReceiverSchedule";
+            //Arrange
             string scheduleJson = null;
+            this.ConsumeScheduleExchange((sender, args) => { scheduleJson = Encoding.UTF8.GetString(args.Body.ToArray()); });
+            var bgService = this.ServiceProvider.GetRequiredService<BackgroundService>();
             
-            var channel = this.ServiceProvider.GetRequiredService<IModel>();
-            var service = RabbitMq.Service.Create(Service.Parse(typeof(GreetingsController)));
-            
-            channel.ExchangeDeclare(ExchangeNames.Schedule, "fanout", true);
-            channel.DeclareAndConsumeQueue(queueName,
-                (sender, args) =>
-                {
-                    scheduleJson = Encoding.UTF8.GetString(args.Body.ToArray());
-                });
-            channel.QueueBind(queueName, ExchangeNames.Schedule, "");
-
-            var bgService = new BackgroundService(
-                channel, 
-                this.ServiceProvider, 
-                service, 
-                this.GetLogger<BackgroundService>());
-
+            //Act
             await bgService.StartAsync(CancellationToken.None);
-
             var token = new CancellationTokenSource(TimeSpan.FromSeconds(2)).Token;
             while (scheduleJson == null)
             {
                 await Task.Delay(100, token);
             }
 
+            //Assert
             var schedule = JsonConvert.DeserializeObject<ReceiverSchedule>(scheduleJson);
             Assert.AreEqual("Greetings", schedule.Receiver);
             Assert.AreEqual(2, schedule.ActionSchedules.Length);
-            var remindAboutYourselfActionSchedule = single(schedule, "Greetings_RemindAboutYourself");
-            var wakeupSchedule = single(schedule, "Greetings_WakeUp");
+
+            Assert.AreEqual(TimeSpan.FromSeconds(30), Single(schedule, "Greetings_RemindAboutYourself").Interval);
             
-            Assert.AreEqual(TimeSpan.FromSeconds(30), remindAboutYourselfActionSchedule.Interval);
+            var wakeupSchedule = Single(schedule, "Greetings_WakeUp");
             Assert.AreEqual(2, wakeupSchedule.EveryDayAt.Length);
-            assertAnyTime(wakeupSchedule, TimeSpan.FromHours(7));
-            assertAnyTime(wakeupSchedule, TimeSpan.FromHours(8));
+            AssertAnyTime(wakeupSchedule, TimeSpan.FromHours(7));
+            AssertAnyTime(wakeupSchedule, TimeSpan.FromHours(8));
             Assert.IsTrue(wakeupSchedule.EveryDayAt.Any(s => s == TimeSpan.FromHours(7)), "wakeupSchedule.EveryDayAt.Any(s => s == TimeSpan.FromHours(7))");
         }
-
+        
         [TestMethod]
         [Ignore("Conflicts with upper method - runs as single")]
         public async Task SubscribeToQueue()
         {
+            var bgService = this.ServiceProvider.GetRequiredService<BackgroundService>();
             var channel = this.ServiceProvider.GetRequiredService<IModel>();
-            var service = RabbitMq.Service.Create(Service.Parse(typeof(GreetingsController)));
-            
-            var bgService = new BackgroundService(
-                channel, 
-                this.ServiceProvider, 
-                service, 
-                this.GetLogger<BackgroundService>());
-
-            await bgService.StartAsync(CancellationToken.None);
-            
-            channel.BasicPublish("", "Greetings_RemindAboutYourself");
             var textStore = this.ServiceProvider.GetRequiredService<TextStore>();
-
+            
+            await bgService.StartAsync(CancellationToken.None);
+            channel.BasicPublish("", "Greetings_RemindAboutYourself");
             await Waiting.For(() => textStore.TextOne != null, TimeSpan.FromSeconds(5));
             
             Assert.AreEqual("Hey there I'm ready to say hello", textStore.TextOne);
         }
 
-        public override IServiceCollection CreateBaseServiceCollection()
+        private void ConsumeScheduleExchange(EventHandler<BasicDeliverEventArgs> handler)
         {
-            var serviceCollection = base.CreateBaseServiceCollection();
-            serviceCollection.AddScoped<GreetingsController>();
-            serviceCollection.AddPipe<EventContext>(pipe => 
-                pipe.Use<Acknowledger>()
-                    .Use<JsonBodyDeserializer>()
-                    .Use<ActionExecutor>());
+            const string queueName = "BackgroundService_Should_RegardingTimers_PublishReceiverSchedule";
+            
+            var channel = this.ServiceProvider.GetRequiredService<IModel>();
 
-            return serviceCollection;
+            channel.ExchangeDeclare(ExchangeNames.Schedule, "fanout", true);
+            channel.DeclareAndConsumeQueue(queueName, handler);
+            channel.QueueBind(queueName, ExchangeNames.Schedule, "");
         }
-
-        private static ActionSchedule single(ReceiverSchedule schedule, string actionId)
+        
+        private static ActionSchedule Single(ReceiverSchedule schedule, string actionId)
         {
             var actionSchedule = schedule.ActionSchedules.SingleOrDefault(a => a.ActionId == actionId);
             if (actionSchedule == null)
@@ -114,7 +92,7 @@ namespace Astor.Background.Tests.Integrations
             return actionSchedule;
         }
 
-        private static void assertAnyTime(ActionSchedule schedule, TimeSpan time)
+        private static void AssertAnyTime(ActionSchedule schedule, TimeSpan time)
         {
             Assert.IsTrue(schedule.EveryDayAt.Any(t => t == time), $"no time {time}");
         }

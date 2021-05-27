@@ -1,5 +1,4 @@
 using System;
-using Astor.Background.Tests;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 

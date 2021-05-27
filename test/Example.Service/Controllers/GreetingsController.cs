@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Astor.Background.Core.Abstractions;
-using Astor.Background.Tests;
+using Astor.Tests;
 using Example.Service.Domain;
 using Example.Service.Models;
 using Microsoft.Extensions.Options;
@@ -11,6 +11,10 @@ namespace Example.Service.Controllers
 {
     public class GreetingsController
     {
+        public const string WavingHand = "Waving Hand";
+
+        public const string BoredMessage = "I'm so bored because there are no one to greet";
+        
         public TextStore TextStore { get; }
         public GreetingPhrases Phrases { get; }
         
@@ -60,6 +64,30 @@ namespace Example.Service.Controllers
         public string WakeUp()
         {
             return "Good morning, it's time to wake up";
+        }
+
+        [RunsOnALoop]
+        public async Task WaveAsync()
+        {
+            var random = new Random().Next(0, 10);
+            if (random == 1)
+            {
+                throw new Exception("random exception");
+            }
+            
+            Console.WriteLine(WavingHand);
+            this.TextStore.Messages.Add(WavingHand);
+
+            await Task.Delay(1000);
+        }
+
+        [RunsOnALoop]
+        public async Task BeBored()
+        {
+            Console.WriteLine(BoredMessage);
+            this.TextStore.TextOne = BoredMessage;
+
+            await Task.Delay(2000);
         }
     }
 }

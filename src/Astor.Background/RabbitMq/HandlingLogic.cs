@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Astor.Background.Core;
 using Astor.RabbitMq;
 using GreenPipes;
@@ -30,15 +31,20 @@ namespace Astor.Background.RabbitMq
             });
         }
 
+        public static async Task ExecuteAsync(EventContext context, IServiceProvider serviceProvider)
+        {
+            using var scope = serviceProvider.CreateScope();
+            var pipe = scope.ServiceProvider.GetRequiredService<IPipe<EventContext>>();
+            await pipe.Send(context);
+        }
+        
         private static EventHandler<BasicDeliverEventArgs> eventHandler(Action action, IServiceProvider serviceProvider)
         {
             return (async (sender, args) =>
             {
                 var context = new EventContext(action, InputHelper.Parse(args));
 
-                using var scope = serviceProvider.CreateScope();
-                var pipe = scope.ServiceProvider.GetRequiredService<IPipe<EventContext>>();
-                await pipe.Send(context);
+                await ExecuteAsync(context, serviceProvider);
             });
         }
     }

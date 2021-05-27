@@ -1,3 +1,4 @@
+using System.Reflection;
 using Astor.Background.Core;
 using Astor.RabbitMq;
 using Astor.Reflection;
@@ -7,11 +8,11 @@ namespace Astor.Background.RabbitMq
 {
     public static class ServiceRegistrationExtensions
     {
-        public static void AddRabbitMqBackgroundService(this IServiceCollection serviceCollection, string rabbitMqConnectionString, string internalExchangePrefix = null)
+        public static void AddRabbitMqBackgroundService(this IServiceCollection serviceCollection, string rabbitMqConnectionString, Assembly assembly = null, string internalExchangePrefix = null)
         {
-            var callerType = StackTraceAnalyzer.GetCallerType();
+            assembly ??= StackTraceAnalyzer.GetCallerType().Assembly;
             
-            serviceCollection.AddBackground(callerType.Assembly);
+            serviceCollection.AddBackground(assembly);
             serviceCollection.AddRabbit(rabbitMqConnectionString);
             serviceCollection.AddSingleton(sp =>
             {

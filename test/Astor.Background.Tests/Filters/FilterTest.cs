@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Astor.Background.Tests.Filters
 {
-    public class FilterTest : Test
+    public class FilterTest : RabbitMqTest
     {
         public Task RunPipeAsync(Action<PipeBuilder<EventContext>> pipeConfiguration, EventContext eventContext)
         {

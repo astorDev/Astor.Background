@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Astor.Background.RabbitMq;
 using Astor.RabbitMq;
+using Astor.Tests;
 using Example.Service.Controllers;
-using Example.Service.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -19,7 +17,7 @@ using Service = Astor.Background.Core.Service;
 
 namespace Astor.Background.Tests
 {
-    public class Test : Astor.Tests.Test
+    public class RabbitMqTest : GreetingsBasedTest
     {
         public readonly string Exchange = Guid.NewGuid().ToString();
 
@@ -56,25 +54,13 @@ namespace Astor.Background.Tests
             channel.BasicConsume(this.Queue, false, consumer);
         }
 
-        public void PublishJson(object message)
-        {
-            var channel = this.ServiceProvider.GetRequiredService<IModel>();
-            
-            channel.PublishJson(this.Exchange, message);
-        }
-
         public override IServiceCollection CreateBaseServiceCollection()
         {
-            var configuration = this.buildConfiguration();
-            
             var serviceCollection = base.CreateBaseServiceCollection();
-            serviceCollection.AddRabbit(configuration.GetSection("Rabbit"));
-            serviceCollection.AddSingleton(Options.Create(
-                new GreetingPhrases
-                {
-                    Beginning = "AutoTestsHi"
-                }));
             
+            var configuration = this.buildConfiguration();
+            serviceCollection.AddRabbit(configuration.GetSection("Rabbit"));
+
             return serviceCollection;
         }
 
@@ -82,7 +68,7 @@ namespace Astor.Background.Tests
         {
             return new ConfigurationBuilder().AddInMemoryCollection(new[]
             {
-                new KeyValuePair<string, string>("Phrases:Host", "localhost"),
+                new KeyValuePair<string, string>("Rabbit:Host", "localhost"),
                 new KeyValuePair<string, string>("Rabbit:Port", "5672"),
                 new KeyValuePair<string, string>("Rabbit:Password", "guest"),
                 new KeyValuePair<string, string>("Rabbit:Login", "guest") 

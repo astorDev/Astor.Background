@@ -25,7 +25,7 @@ namespace Astor.Background.Tests.Descriptions
             collection.EnsureTypeAndSubtypesAdded(typeof(GreetingCandidate));
 
             var dictionary = collection.ToDictionary();
-            Console.WriteLine(JsonConvert.SerializeObject(dictionary, Test.JsonSerializerSettings));
+            Console.WriteLine(JsonConvert.SerializeObject(dictionary, RabbitMqTest.JsonSerializerSettings));
         }
     }
 }

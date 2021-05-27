@@ -22,7 +22,7 @@ namespace Astor.Background.Tests.Descriptions
                 Version = "1.0"
             });
 
-            Console.WriteLine(JsonConvert.SerializeObject(description, Test.JsonSerializerSettings));
+            Console.WriteLine(JsonConvert.SerializeObject(description, RabbitMqTest.JsonSerializerSettings));
             var openApiDoc = description.ToOpenApiDocument();
             Console.WriteLine(openApiDoc.ToV3Json());
         }
