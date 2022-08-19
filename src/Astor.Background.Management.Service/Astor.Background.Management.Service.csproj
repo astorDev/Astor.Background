@@ -2,7 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <UserSecretsId>3d5975c0-ddb7-42c9-8eb8-c3cafb400d26</UserSecretsId>
     </PropertyGroup>
@@ -10,9 +11,9 @@
     <ItemGroup>
       <PackageReference Include="Astor.Logging" Version="1.0.0" />
       <PackageReference Include="FluentScheduler" Version="5.5.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
       <PackageReference Include="MongoDB.Driver" Version="2.11.6" />
     </ItemGroup>
 
@@ -23,6 +24,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Astor.Background\Astor.Background.csproj" />
+      <ProjectReference Include="..\Astor.Timers\Astor.Timers.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Using Include="Astor.Timers" /> 
     </ItemGroup>
 
 </Project>

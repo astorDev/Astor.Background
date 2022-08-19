@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using ActionSchedule = Astor.Background.Management.Service.Timers.ActionSchedule;
+using IntervalAction = Astor.Timers.IntervalAction;
 
 namespace Astor.Background.Management.Service.Controllers
 {
@@ -38,20 +39,22 @@ namespace Astor.Background.Management.Service.Controllers
         [SubscribedOnInternal(InternalEventNames.Started)]
         public async Task RefreshAsync()
         {
-            var schedule = await this.Store.GetAllAsync();
+            var schedule = (await this.Store.GetAllAsync()).ToArray();
             this.Logger.LogDebug($"{schedule.Count()} of schedules received - updating timers");
             
             foreach (var row in schedule)
             {
-                var timesAction = row.ToTimesActionOrNull(this.timeZoneShift);
+                if (row.Times is null && row.Interval is null) throw new InvalidOperationException("either times or interval must be not null");
                 
-                if (timesAction != null)
+                if (row.Times != null)
                 {
+                    var timesAction = TimesAction.WithTimeZoneShift(row.ActionId, row.EveryDayAt, this.timeZoneShift);
                     this.Timers.Ensure(timesAction, this.TriggerAction);
                 }
                 else
                 {
-                    this.Timers.Ensure(row.ToIntervalAction(), this.TriggerAction);
+                    var intervalAction = new IntervalAction(row.ActionId, row.Interval!.Value);
+                    this.Timers.Ensure(intervalAction, this.TriggerAction);
                 }
             }
             

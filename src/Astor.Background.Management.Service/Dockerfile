@@ -5,6 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
 COPY ["Astor.Background.Management.Service/Astor.Background.Management.Service.csproj", "Astor.Background.Management.Service/"]
 COPY ["Astor.Background/Astor.Background.csproj", "Astor.Background/"]
+COPY ["Astor.Timers/Astor.Timers.csproj", "Astor.Timers/"]
 
 RUN dotnet restore "Astor.Background.Management.Service/Astor.Background.Management.Service.csproj"
 COPY . .
