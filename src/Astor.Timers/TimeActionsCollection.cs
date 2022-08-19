@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using FluentScheduler;
 using Microsoft.Extensions.Logging;
 
-namespace Astor.Background.Management.Service.Timers
+namespace Astor.Timers
 {
     public class TimeActionsCollection
     {
@@ -79,7 +76,7 @@ namespace Astor.Background.Management.Service.Timers
         private void add(TimeAction timeAction, Action<string> action)
         {
             this.innerCollection.Add(timeAction);
-            this.Logger.LogDebug($"adding job {timeAction.Id} to run every day at {timeAction.TimeOfDay}");
+            this.Logger.LogDebug($"adding job {timeAction.Id} to run every day at {timeAction.TimeOfDay.Hours}:{timeAction.TimeOfDay.Minutes}");
             JobManager.AddJob(() => action(timeAction.ActionId),
                 schedule =>
                 {

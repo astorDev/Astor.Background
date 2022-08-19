@@ -1,6 +1,4 @@
-using System;
-
-namespace Astor.Background.Management.Service.Timers
+namespace Astor.Timers
 {
     public class TimeAction
     {
