@@ -7,7 +7,7 @@ public class IntervalActionsCollection
 {
     public ILogger<IntervalActionsCollection> Logger { get; }
 
-    private readonly List<IntervalAction> innerCollection = new();
+    readonly List<IntervalAction> innerCollection = new();
 
     public IntervalActionsCollection(ILogger<IntervalActionsCollection> logger)
     {
@@ -16,11 +16,8 @@ public class IntervalActionsCollection
 
     public void Add(IntervalAction intervalAction, Action<string> action)
     {
-        if (this.Any(intervalAction.ActionId))
-        {
-            throw new InvalidOperationException($"{intervalAction.ActionId} already added");
-        }
-            
+        if (this.Any(intervalAction.ActionId)) throw new InvalidOperationException($"{intervalAction.ActionId} already added");
+
         this.innerCollection.Add(intervalAction);
             
         this.Logger.LogDebug($"adding timer job {intervalAction.ActionId} with interval {intervalAction.Interval}");
@@ -33,11 +30,6 @@ public class IntervalActionsCollection
             });
     }
 
-    private void Do()
-    {
-        Task.Delay(2000);
-    }
-    
     public void EnsureRemoved(string actionId)
     {
         var existing = this.Search(actionId);
