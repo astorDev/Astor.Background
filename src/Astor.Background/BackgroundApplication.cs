@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Astor.Background.Core;
 using Astor.GreenPipes;
 using Astor.Reflection;
-using Astor.Timers;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,11 +15,9 @@ namespace Astor.Background;
 public class BackgroundApplication
 {
     readonly Builder builder;
-
     public PipeBuilder<EventContext> Pipe { get; }
-    
-    private BackgroundApplication(Builder builder)
-    {
+
+    BackgroundApplication(Builder builder) {
         this.builder = builder;
         this.Pipe = new(builder.Services);
     }
@@ -30,24 +26,20 @@ public class BackgroundApplication
     {
         var hostBuilder = this.CreateHostBuilder();
         var host = hostBuilder.UseConsoleLifetime().Build();
-        
 
         await host.RunAsync();
     }
 
-    IHostBuilder CreateHostBuilder()
-    {
-        return new HostBuilder()
+    IHostBuilder CreateHostBuilder() =>
+        new HostBuilder()
             .ConfigureAppConfiguration(config => config.AddConfiguration(this.builder.Configuration))
             .ConfigureServices(s =>
             {
                 this.Pipe.RegisterPipe();
                 foreach (var descriptor in this.builder.Services) s.Add(descriptor);
             });
-    }
 
-    public static Builder CreateTimersOnlyBuilder(string[] args)
-    {
+    public static Builder CreateTimersOnlyBuilder(string[] args) {
         var builder = new Builder(args);
         
         builder.Services.AddSingleton<IHostedService, AtomicTimersHostedService>();
@@ -60,8 +52,7 @@ public class BackgroundApplication
     
     public class Builder
     {
-        class LoggingBuilder : ILoggingBuilder
-        {
+        class LoggingBuilder : ILoggingBuilder {
             public IServiceCollection Services { get; }
             public LoggingBuilder(IServiceCollection services) { this.Services = services; }
         }
