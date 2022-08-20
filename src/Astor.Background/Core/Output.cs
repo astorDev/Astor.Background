@@ -4,8 +4,8 @@ namespace Astor.Background.Core
 {
     public class ActionResult
     {
-        public object Output { get; set; }
+        public object? Output { get; set; }
         
-        public Exception Exception { get; set; }
+        public Exception? Exception { get; set; }
     }
 }
