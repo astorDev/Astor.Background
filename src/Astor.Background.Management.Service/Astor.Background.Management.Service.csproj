@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Astor.Logging" Version="1.0.0" />
       <PackageReference Include="FluentScheduler" Version="5.5.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
@@ -24,7 +23,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Astor.Background\Astor.Background.csproj" />
-      <ProjectReference Include="..\Astor.Timers\Astor.Timers.csproj" />
     </ItemGroup>
     
     <ItemGroup>
