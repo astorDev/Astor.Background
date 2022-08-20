@@ -1,21 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <PackageVersion>2.2.0</PackageVersion>
+        <TargetFramework>net6.0</TargetFramework>
+        <PackageVersion>2.3.0</PackageVersion>
+        <LangVersion>default</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Astor.GreenPipes" Version="1.0.0" />
       <PackageReference Include="Astor.RabbitMq" Version="1.1.0" />
       <PackageReference Include="GreenPipes" Version="4.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
       <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.2.3" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="NSwag.Generation" Version="13.10.9" />
       <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
       <PackageReference Include="Telegram.Bot" Version="15.7.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Astor.Timers\Astor.Timers.csproj" />
     </ItemGroup>
 
 </Project>

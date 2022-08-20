@@ -1,5 +1,8 @@
 using System;
 using System.Reflection;
+
+using Astor.Reflection;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Astor.Background.Core
@@ -13,6 +16,20 @@ namespace Astor.Background.Core
             {
                 services.AddScoped(controllerTypes);
             }
+        }
+
+        public static void AddBackgroundServiceDeclaration(this IServiceCollection services)
+        {
+            var callerType = StackTraceAnalyzer.GetCallerType();
+            var serviceDeclaration = Service.Parse(callerType.Assembly);
+
+            services.AddSingleton(serviceDeclaration);
+        }
+        
+        public static void AddBackgroundServiceControllers(this IServiceCollection services)
+        {
+            var backgroundService = services.BuildServiceProvider().GetRequiredService<Service>();
+            foreach (var controllerTypes in backgroundService.ControllerTypes) services.AddScoped(controllerTypes);
         }
 
         public static void AddBackground(this IServiceCollection services, Assembly assembly)
