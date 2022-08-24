@@ -1,6 +1,4 @@
-﻿Console.WriteLine("starting..");
-
-var builder = new BackgroundApplication.Builder(args);
+﻿var builder = new BackgroundApplication.Builder(args);
 
 builder.Services.AddBackgroundServiceDeclaration();
 builder.Services.AddBackgroundServiceControllers();
