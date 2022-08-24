@@ -9,6 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Astor.GreenPipes" Version="1.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
     </ItemGroup>

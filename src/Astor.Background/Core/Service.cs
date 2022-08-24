@@ -22,9 +22,9 @@ namespace Astor.Background.Core
             this.TimersBasedActions = timersBasedActions;
         }
 
-        public static Service Parse(Assembly assembly)
+        public static Service Parse(params Assembly[] assemblies)
         {
-            return Parse(assembly.DefinedTypes.ToArray());
+            return Parse(assemblies.SelectMany(a => a.DefinedTypes).ToArray());
         }
 
         public static Service Parse(params Type[] types)

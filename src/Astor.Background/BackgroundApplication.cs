@@ -2,13 +2,11 @@ using System.Threading.Tasks;
 
 using Astor.Background.Core;
 using Astor.GreenPipes;
-using Astor.Reflection;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
-using Namotion.Reflection;
 
 namespace Astor.Background;
 
@@ -39,17 +37,6 @@ public class BackgroundApplication
                 foreach (var descriptor in this.builder.Services) s.Add(descriptor);
             });
 
-    public static Builder CreateTimersOnlyBuilder(string[] args) {
-        var builder = new Builder(args);
-        
-        builder.Services.AddSingleton<IHostedService, AtomicTimersHostedService>();
-        
-        var callerType = StackTraceAnalyzer.GetCallerType();
-        builder.Services.AddBackground(callerType.Assembly);
-
-        return builder;
-    }
-    
     public class Builder
     {
         class LoggingBuilder : ILoggingBuilder {
@@ -58,23 +45,19 @@ public class BackgroundApplication
         }
         
         public string Environment { get; }
-        
-        public IConfiguration Configuration { get; }
-        
+        public ConfigurationManager Configuration { get; }
         public ServiceCollection Services { get; }
-        
         public ILoggingBuilder Logging { get; }
         
         public Builder(string[]? args)
         {
             var configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
-            this.Environment = configuration.TryGetPropertyValue("Environment", "")!;
-            this.Configuration = new ConfigurationBuilder()
-                .AddConfiguration(configuration)
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{Environment}.json", optional: true)
-                .Build();
-            
+            this.Environment = configuration["environment"];
+            this.Configuration = new();
+            this.Configuration.AddJsonFile("appsettings.json", optional: true);
+            this.Configuration.AddJsonFile($"appsettings.{this.Environment}.json", optional: true);
+            this.Configuration.AddConfiguration(configuration);
+
             this.Services = new();
             this.Logging = new LoggingBuilder(this.Services);
             this.Logging.AddConfiguration(this.Configuration.GetSection("Logging"));

@@ -8,20 +8,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Astor.Background\Astor.Background.csproj" />
+        <ProjectReference Include="..\..\src\Astor.Background\Astor.Background.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="appsettings.json" />
-      <Content Include="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+        <None Remove="appsettings.json" />
+        <Content Include="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="appsettings.Local.json" />
+        <Content Include="appsettings.Local.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Astor.Logging" Version="2.1.0" />
+        <PackageReference Include="Astor.Logging" Version="2.1.0" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <Using Include="System.Text.Json" />
         <Using Include="Astor.Background" />
@@ -32,6 +36,9 @@
         <Using Include="Microsoft.Extensions.DependencyInjection" />
         <Using Include="Microsoft.Extensions.Hosting" />
         <Using Include="Microsoft.Extensions.Logging" />
+        <Using Include="Astor.Background.Core.Abstractions" />
+        <Using Include="Microsoft.Extensions.Configuration" />
     </ItemGroup>
 
 </Project>
+
