@@ -1,20 +1,40 @@
-using Astor.Background.Core.Abstractions;
-
-public class ClockController
-{
+public class ClockController {
+    readonly IBird bird;
+    public ClockController(IBird bird) { this.bird = bird; }
+    
     [RunsEvery("0:00:01")]
     public async Task<string> Tick() => "sec passed";
 
-    [RunsEvery("0:00:5")]
-    public async Task<object> ActivateBird() => new { Sound = Cuckoo.MakeSound(), From = nameof(Cuckoo) };
-    
-    static class Cuckoo
+    [RunsEvery("0:00:05")]
+    public async Task<object> ActivateBird()
     {
-        public static string MakeSound()
+        var sound = await this.bird.MakeSound();
+        return new { Sound = sound, From = this.bird.Name };
+    }
+    
+    public interface IBird {
+        string Name { get; }
+        Task<string> MakeSound();
+    }
+    
+    public class Cuckoo : IBird {
+        readonly int repeats;
+        readonly string? greeting;
+
+        public Cuckoo(IConfiguration configuration) {
+            this.repeats = Int32.Parse(configuration["BirdSoundRepeats"]);
+            this.greeting = configuration["BirdGreeting"];
+        }
+        
+        public string Name => nameof(Cuckoo);
+
+        public async Task<string> MakeSound()
         {
-            if (DateTime.Now.Millisecond % 5 == 0) throw new InvalidOperationException("Can not work at the moment");
-            return "Cuckoo-Cuckoo";
+            await Task.Delay(100);
+            if (DateTime.Now.Millisecond % 3 == 0) throw new InvalidOperationException("Can not work at the moment");
+
+            var soundParts = Enumerable.Range(0, this.repeats).Select(_ => "Cuckoo");
+            return this.greeting ?? "" + String.Join("-", soundParts);
         }
     }
 }
-

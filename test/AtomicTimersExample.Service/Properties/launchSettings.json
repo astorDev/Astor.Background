@@ -1,10 +1,9 @@
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "TimersExample.Service": {
+    "Local": {
       "commandName": "Project",
-      "environmentVariables": {
-      }
+      "commandLineArgs": "--Environment=Local --BirdSoundRepeats=2"
     }
   }
 }
