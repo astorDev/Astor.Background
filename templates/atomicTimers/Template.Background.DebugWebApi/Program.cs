@@ -7,14 +7,13 @@ builder.Services.AddBackgroundServiceDeclaration();
 builder.Services.AddBackgroundServiceControllers();
 
 builder.Services.AddApplicationServices();
-
 builder.Services.AddBackgroundServiceSwaggerGenerator();
 
 builder.Services.AddPipe<EventContext>(p => 
     p.Use<IOLogger>()
-        .Use<HandlingTimer>()
-        .Use<JsonBodyDeserializer>()
-        .Use<ActionExecutor>()
+     .Use<HandlingTimer>()
+     .Use<JsonBodyDeserializer>()
+     .Use<ActionExecutor>()
 );
 
 builder.Logging.AddSimpleConsole(c => c.SingleLine = true);
