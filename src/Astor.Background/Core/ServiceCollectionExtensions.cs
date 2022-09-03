@@ -1,6 +1,9 @@
 using System;
 using System.Linq;
 using System.Reflection;
+
+using Astor.Reflection;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Astor.Background.Core

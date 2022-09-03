@@ -1,0 +1,15 @@
+﻿{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Astor",
+  "classifications": [ "Background" ],
+  "name": "Astor Atomic Timer",
+  "identity": "Astor.Timers.Service.Template",
+  "groupIdentity":"Astor.Templates",
+  "shortName": "timer",
+  "tags": {
+    "language": "C#",
+    "type":"project"
+  },
+  "sourceName": "Template",
+  "preferNameDirectory": true
+}

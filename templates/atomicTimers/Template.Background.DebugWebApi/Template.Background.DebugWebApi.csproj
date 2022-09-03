@@ -7,16 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Astor.Background\Astor.Background.csproj" />
-      <ProjectReference Include="..\AtomicTimersExample.Service\AtomicTimersExample.Service.csproj" />
+        <PackageReference Include="Astor.GreenPipes" Version="1.0.0" />
+        <PackageReference Include="Astor.Logging" Version="2.1.0" />
+        <PackageReference Include="GreenPipes" Version="4.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Astor.Logging" Version="2.1.0" />
-      <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
-      <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
-    </ItemGroup>
-    
     <ItemGroup>
         <Using Include="System.Text.Json" />
         <Using Include="Astor.Background.Core" />
@@ -29,6 +25,10 @@
         <Using Include="GreenPipes" />
         <Using Include="Microsoft.AspNetCore.Mvc" />
         <Using Include="Microsoft.OpenApi.Models" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Template.Background.Service\Template.Background.Service.csproj" />
     </ItemGroup>
 
 </Project>

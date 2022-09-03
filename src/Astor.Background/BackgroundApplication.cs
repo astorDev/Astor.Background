@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using Namotion.Reflection;
+
 namespace Astor.Background;
 
 public class BackgroundApplication
@@ -45,8 +47,11 @@ public class BackgroundApplication
         }
         
         public string Environment { get; }
+        
         public ConfigurationManager Configuration { get; }
+        
         public ServiceCollection Services { get; }
+        
         public ILoggingBuilder Logging { get; }
         
         public Builder(string[]? args)
@@ -55,7 +60,7 @@ public class BackgroundApplication
             this.Environment = configuration["environment"];
             this.Configuration = new();
             this.Configuration.AddJsonFile("appsettings.json", optional: true);
-            this.Configuration.AddJsonFile($"appsettings.{this.Environment}.json", optional: true);
+            this.Configuration.AddJsonFile($"appsettings.{Environment}.json", optional: true);
             this.Configuration.AddConfiguration(configuration);
 
             this.Services = new();

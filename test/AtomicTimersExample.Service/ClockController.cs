@@ -1,6 +1,15 @@
-public class ClockController {
-    readonly IBird bird;
-    public ClockController(IBird bird) { this.bird = bird; }
+using Astor.Background.Core.Abstractions;
+
+using Microsoft.Extensions.Configuration;
+
+public class ClockController
+{
+    private readonly IBird bird;
+
+    public ClockController(IBird bird)
+    {
+        this.bird = bird;
+    }
     
     [RunsEvery("0:00:01")]
     public async Task<string> Tick() => "sec passed";
@@ -12,12 +21,14 @@ public class ClockController {
         return new { Sound = sound, From = this.bird.Name };
     }
     
-    public interface IBird {
+    public interface IBird
+    {
         string Name { get; }
         Task<string> MakeSound();
     }
     
-    public class Cuckoo : IBird {
+    public class Cuckoo : IBird
+    {
         readonly int repeats;
         readonly string? greeting;
 
@@ -38,3 +49,4 @@ public class ClockController {
         }
     }
 }
+

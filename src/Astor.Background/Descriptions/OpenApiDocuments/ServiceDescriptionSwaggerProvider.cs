@@ -8,7 +8,8 @@ namespace Astor.Background.Descriptions.OpenApiDocuments;
 
 public class SingleServiceDescriptionSwaggerProvider : ISwaggerProvider
 {
-    readonly ServiceDescription serviceDescription;
+    private readonly ServiceDescription serviceDescription;
+
     public SingleServiceDescriptionSwaggerProvider(ServiceDescription serviceDescription) {
         this.serviceDescription = serviceDescription;
     }
