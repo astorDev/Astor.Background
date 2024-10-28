@@ -1,0 +1,6 @@
+@Astor.Background.Timers.WebApiPlayground_HostAddress = http://localhost:5106
+
+GET {{Astor.Background.Timers.WebApiPlayground_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
